@@ -1,3 +1,5 @@
+//archivo: show_hide_name.dart
+
 import 'package:flutter/material.dart';
 
 class ShowHideNameSwitch extends StatefulWidget {
@@ -29,25 +31,6 @@ class _ShowHideNameSwitchState extends State<ShowHideNameSwitch> {
           currentValue = value;
         });
         widget.onChanged(value);
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Aviso'),
-              content: Text(value
-                  ? 'Has seleccionado mostrar el nombre de los tabs.'
-                  : 'Has seleccionado ocultar el nombre de los tabs.'),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('Cerrar'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
       },
     );
   }
