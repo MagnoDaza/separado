@@ -76,12 +76,37 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
               if (_tabIndex != null &&
                   _textController != null &&
                   _icon != null) {
-                Provider.of<TabProvider>(context, listen: false)
-                    .updateTab(_tabIndex!, _textController!.text, _icon!);
-                Fluttertoast.showToast(
-                  msg: "Tab actualizado",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.BOTTOM,
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Confirmar edición'),
+                      content:
+                          Text('¿Estás seguro de que quieres editar este tab?'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('Cancelar'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: Text('Confirmar edición'),
+                          onPressed: () {
+                            Provider.of<TabProvider>(context, listen: false)
+                                .updateTab(
+                                    _tabIndex!, _textController!.text, _icon!);
+                            Fluttertoast.showToast(
+                              msg: "Tab actualizado",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                            );
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
                 );
               } else if (_textController != null && _icon != null) {
                 Provider.of<TabProvider>(context, listen: false)
@@ -91,10 +116,11 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.BOTTOM,
                 );
+                Navigator.pop(context);
               }
-              Navigator.pop(context);
             },
-            child: Text('Confirmar'),
+            child: Text(
+                _tabIndex != null ? 'Confirmar edición' : 'Crear nuevo tab'),
           ),
           SizedBox(height: 10),
           Text('Ocultar o mostrar nombre'),
