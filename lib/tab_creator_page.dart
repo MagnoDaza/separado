@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Añade esta línea
+import 'package:provider/provider.dart';
 import 'tab_provider.dart';
+import 'show_hide_name_switch.dart'; // Asegúrate de usar la ruta correcta al archivo
 
 class TabCreatorPage extends StatefulWidget {
   final int? tabIndex;
@@ -85,49 +86,11 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
           ),
           SizedBox(height: 10),
           Text('Ocultar o mostrar nombre'),
-          ElevatedButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return StatefulBuilder(
-                    builder: (context, setState) {
-                      return AlertDialog(
-                        content: Container(
-                          width: double.maxFinite,
-                          child: ListView(
-                            children:
-                                Provider.of<TabProvider>(context).myTabs.map(
-                              (tabData) {
-                                return CheckboxListTile(
-                                  title: Text(tabData.text),
-                                  secondary: Icon(tabData.icon),
-                                  value: tabData.showText,
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      tabData.showText = value!;
-                                    });
-                                  },
-                                );
-                              },
-                            ).toList(),
-                          ),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text('Cerrar'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-              );
+          ShowHideNameSwitch(
+            initialValue: true,
+            onChanged: (value) {
+              // Aquí va tu código para manejar cuando el switch cambia de estado
             },
-            child: Icon(Icons.edit_outlined),
           ),
           SizedBox(height: 10),
           Text('Historial'),

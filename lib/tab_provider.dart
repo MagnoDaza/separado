@@ -36,4 +36,13 @@ class TabProvider with ChangeNotifier {
     myTabs.insert(newIndex, tab);
     notifyListeners();
   }
+
+  // En tu archivo tab_provider.dart
+
+  void toggleShowText(bool value) {
+    for (var tab in myTabs) {
+      tab.showText = value;
+    }
+    notifyListeners();
+  }
 }
