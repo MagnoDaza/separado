@@ -3,11 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'tab_provider.dart';
-import 'show_hide_name_switch.dart'; // Asegúrate de usar la ruta correcta al archivo
+import 'show_hide_name_switch.dart';
+import 'package:fluttertoast/fluttertoast.dart'; // Asegúrate de tener esta librería
 
 class TabCreatorPage extends StatefulWidget {
   final int? tabIndex;
-
   TabCreatorPage({this.tabIndex});
 
   @override
@@ -78,22 +78,18 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                   _icon != null) {
                 Provider.of<TabProvider>(context, listen: false)
                     .updateTab(_tabIndex!, _textController!.text, _icon!);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                        'Se creó el tab con el nombre ${_textController!.text}'),
-                    duration: Duration(seconds: 1),
-                  ),
+                Fluttertoast.showToast(
+                  msg: "Tab actualizado",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
                 );
               } else if (_textController != null && _icon != null) {
                 Provider.of<TabProvider>(context, listen: false)
                     .addTab(_textController!.text, _icon!);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                        'Se creó el tab con el nombre ${_textController!.text}'),
-                    duration: Duration(seconds: 1),
-                  ),
+                Fluttertoast.showToast(
+                  msg: "Tab creado",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
                 );
               }
               Navigator.pop(context);
@@ -107,13 +103,12 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
             onChanged: (value) {
               Provider.of<TabProvider>(context, listen: false)
                   .toggleShowText(value);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(value
-                      ? 'Mostrando nombres de tabs'
-                      : 'Ocultando nombres de tabs'),
-                  duration: Duration(seconds: 1),
-                ),
+              Fluttertoast.showToast(
+                msg: value
+                    ? 'Mostrando nombres de tabs'
+                    : 'Ocultando nombres de tabs',
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
               );
             },
           ),
@@ -145,12 +140,45 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                       child: Text('Editar'),
                     ),
                     ElevatedButton(
-                      onPressed: () => Provider.of<TabProvider>(context,
-                              listen: false)
-                          .removeTab(
-                              Provider.of<TabProvider>(context, listen: false)
-                                  .myTabs
-                                  .indexOf(tabData)),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                      ),
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Confirmar eliminación'),
+                            content: Text(
+                                '¿Estás seguro de que quieres eliminar este tab?'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('Cancelar'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: Text('Eliminar'),
+                                onPressed: () {
+                                  Provider.of<TabProvider>(context,
+                                          listen: false)
+                                      .removeTab(Provider.of<TabProvider>(
+                                              context,
+                                              listen: false)
+                                          .myTabs
+                                          .indexOf(tabData));
+                                  Navigator.of(context).pop();
+                                  Fluttertoast.showToast(
+                                    msg: "Tab eliminado",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                  );
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                       child: Text('Eliminar'),
                     ),
                   ]),

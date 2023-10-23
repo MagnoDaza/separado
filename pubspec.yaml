@@ -10,6 +10,10 @@ dependencies:
   flutter:
     sdk: flutter
   provider:
+  fluttertoast: ^8.2.2  # Asegúrate de usar la última versión
+
+
+
 
 dev_dependencies:
   flutter_test:
