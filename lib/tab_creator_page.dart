@@ -21,9 +21,10 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
     super.initState();
     if (widget.tabIndex != null) {
       _textController = TextEditingController(
-          text: Provider.of<TabProvider>(context, listen: false)
-              .myTabs[widget.tabIndex!]
-              .text);
+        text: Provider.of<TabProvider>(context, listen: false)
+            .myTabs[widget.tabIndex!]
+            .text,
+      );
       _icon = Provider.of<TabProvider>(context, listen: false)
           .myTabs[widget.tabIndex!]
           .icon;
@@ -42,33 +43,31 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
       ),
       body: Column(
         children: [
-          Row(children: [
-            DropdownButton<IconData>(
-              value: _icon,
-              onChanged: (IconData? newValue) {
-                if (newValue != null) {
-                  setState(() {
-                    _icon = newValue;
-                  });
-                }
-              },
-              items: [Icons.home, Icons.star, Icons.settings]
-                  .map<DropdownMenuItem<IconData>>((IconData value) {
-                return DropdownMenuItem<IconData>(
-                  value: value,
-                  child: Icon(value),
-                );
-              }).toList(),
-            ),
-            Expanded(
-              child: TextField(
-                controller: _textController,
-                decoration: InputDecoration(
-                  labelText: 'Nombre del Tab',
-                ),
+          Expanded(
+            child: TextField(
+              controller: _textController,
+              decoration: InputDecoration(
+                labelText: 'Nombre del Tab',
               ),
             ),
-          ]),
+          ),
+          DropdownButton<IconData>(
+            value: _icon,
+            onChanged: (IconData? newValue) {
+              if (newValue != null) {
+                setState(() {
+                  _icon = newValue;
+                });
+              }
+            },
+            items: [Icons.home, Icons.star, Icons.settings]
+                .map<DropdownMenuItem<IconData>>((IconData value) {
+              return DropdownMenuItem<IconData>(
+                value: value,
+                child: Icon(value),
+              );
+            }).toList(),
+          ),
           ElevatedButton(
             onPressed: () {
               if (_tabIndex != null &&
@@ -85,22 +84,50 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
             child: Text('Confirmar'),
           ),
           SizedBox(height: 10),
-          Text('Oculta el nombre del tab si es mayor a'),
-          DropdownButton<int>(
-            value: Provider.of<TabProvider>(context).maxTabsToShowText,
-            onChanged: (int? newValue) {
-              if (newValue != null && newValue >= 0) {
-                Provider.of<TabProvider>(context, listen: false)
-                    .setMaxTabsToShowText(newValue);
-              }
-            },
-            items: <int>[1, 2, 3, 4, 5, -1]
-                .map<DropdownMenuItem<int>>((int value) {
-              return DropdownMenuItem<int>(
-                value: value,
-                child: Text(value == -1 ? 'Mostrar todos' : value.toString()),
+          Text('Ocultar o mostrar nombre'),
+          ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      return AlertDialog(
+                        content: Container(
+                          width: double.maxFinite,
+                          child: ListView(
+                            children:
+                                Provider.of<TabProvider>(context).myTabs.map(
+                              (tabData) {
+                                return CheckboxListTile(
+                                  title: Text(tabData.text),
+                                  secondary: Icon(tabData.icon),
+                                  value: tabData.showText,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      tabData.showText = value!;
+                                    });
+                                  },
+                                );
+                              },
+                            ).toList(),
+                          ),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Cerrar'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
               );
-            }).toList(),
+            },
+            child: Icon(Icons.edit_outlined),
           ),
           SizedBox(height: 10),
           Text('Historial'),
@@ -109,40 +136,38 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
               onReorder: (oldIndex, newIndex) =>
                   Provider.of<TabProvider>(context, listen: false)
                       .reorderTabs(oldIndex, newIndex),
-              children: Provider.of<TabProvider>(context)
-                  .myTabs
-                  .map((tabData) => ListTile(
-                        key: Key(tabData.text),
-                        leading: Icon(tabData.icon),
-                        title: Text(tabData.text),
-                        trailing:
-                            Row(mainAxisSize: MainAxisSize.min, children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _textController =
-                                    TextEditingController(text: tabData.text);
-                                _icon = tabData.icon;
-                                _tabIndex = Provider.of<TabProvider>(context,
-                                        listen: false)
-                                    .myTabs
-                                    .indexOf(tabData);
-                              });
-                            },
-                            child: Text('Editar'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () =>
-                                Provider.of<TabProvider>(context, listen: false)
-                                    .removeTab(Provider.of<TabProvider>(context,
-                                            listen: false)
-                                        .myTabs
-                                        .indexOf(tabData)),
-                            child: Text('Eliminar'),
-                          ),
-                        ]),
-                      ))
-                  .toList(),
+              children: Provider.of<TabProvider>(context).myTabs.map((tabData) {
+                return ListTile(
+                  key: Key(tabData.text),
+                  leading: Icon(tabData.icon),
+                  title: Text(tabData.text),
+                  trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _textController =
+                              TextEditingController(text: tabData.text);
+                          _icon = tabData.icon;
+                          _tabIndex =
+                              Provider.of<TabProvider>(context, listen: false)
+                                  .myTabs
+                                  .indexOf(tabData);
+                        });
+                      },
+                      child: Text('Editar'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => Provider.of<TabProvider>(context,
+                              listen: false)
+                          .removeTab(
+                              Provider.of<TabProvider>(context, listen: false)
+                                  .myTabs
+                                  .indexOf(tabData)),
+                      child: Text('Eliminar'),
+                    ),
+                  ]),
+                );
+              }).toList(),
             ),
           ),
         ],
