@@ -76,9 +76,23 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                   _icon != null) {
                 Provider.of<TabProvider>(context, listen: false)
                     .updateTab(_tabIndex!, _textController!.text, _icon!);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                        'Se creó el tab con el nombre ${_textController!.text}'),
+                    duration: Duration(seconds: 1),
+                  ),
+                );
               } else if (_textController != null && _icon != null) {
                 Provider.of<TabProvider>(context, listen: false)
                     .addTab(_textController!.text, _icon!);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                        'Se creó el tab con el nombre ${_textController!.text}'),
+                    duration: Duration(seconds: 1),
+                  ),
+                );
               }
               Navigator.pop(context);
             },
@@ -89,7 +103,16 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
           ShowHideNameSwitch(
             initialValue: true,
             onChanged: (value) {
-              // Aquí va tu código para manejar cuando el switch cambia de estado
+              Provider.of<TabProvider>(context, listen: false)
+                  .toggleShowText(value);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(value
+                      ? 'Mostrando nombres de tabs'
+                      : 'Ocultando nombres de tabs'),
+                  duration: Duration(seconds: 1),
+                ),
+              );
             },
           ),
           SizedBox(height: 10),
