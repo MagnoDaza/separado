@@ -73,50 +73,87 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
           ),
           ElevatedButton(
             onPressed: () {
-              if (_tabIndex != null &&
-                  _textController != null &&
-                  _icon != null) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Confirmar edición'),
-                      content:
-                          Text('¿Estás seguro de que quieres editar este tab?'),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text('Cancelar'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
+              if (_textController != null &&
+                  _icon != null &&
+                  _textController!.text.isNotEmpty) {
+                if (_tabIndex != null) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Confirmar edición'),
+                        content: Column(
+                          children: <Widget>[
+                            TextField(
+                              controller: _textController,
+                              decoration:
+                                  InputDecoration(hintText: "Nombre del Tab"),
+                            ),
+                            DropdownButton<IconData>(
+                              value: _icon,
+                              onChanged: (IconData? newValue) {
+                                if (newValue != null) {
+                                  setState(() {
+                                    _icon = newValue;
+                                  });
+                                }
+                              },
+                              items: [Icons.home, Icons.star, Icons.settings]
+                                  .map<DropdownMenuItem<IconData>>(
+                                      (IconData value) {
+                                return DropdownMenuItem<IconData>(
+                                  value: value,
+                                  child: Icon(value),
+                                );
+                              }).toList(),
+                            ),
+                          ],
                         ),
-                        TextButton(
-                          child: Text('Confirmar edición'),
-                          onPressed: () {
-                            Provider.of<TabProvider>(context, listen: false)
-                                .updateTab(
-                                    _tabIndex!, _textController!.text, _icon!);
-                            Fluttertoast.showToast(
-                              msg: "Tab actualizado",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                            );
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              } else if (_textController != null && _icon != null) {
-                Provider.of<TabProvider>(context, listen: false)
-                    .addTab(_textController!.text, _icon!);
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Cancelar'),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                          TextButton(
+                            child: Text('Confirmar edición'),
+                            onPressed: () {
+                              Provider.of<TabProvider>(context, listen: false)
+                                  .updateTab(_tabIndex!, _textController!.text,
+                                      _icon!);
+                              Fluttertoast.showToast(
+                                msg: "Tab actualizado",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                              );
+                              // Restablecer los campos a los valores predeterminados
+                              setState(() {
+                                _textController!.clear();
+                                _icon = Icons.home;
+                                _tabIndex = null;
+                              });
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  Provider.of<TabProvider>(context, listen: false)
+                      .addTab(_textController!.text, _icon!);
+                  Fluttertoast.showToast(
+                    msg: "Tab creado",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                  );
+                  // No se necesita restablecer los campos a los valores predeterminados
+                }
+              } else {
                 Fluttertoast.showToast(
-                  msg: "Tab creado",
+                  msg: "Por favor, proporciona un nombre para el tab",
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.BOTTOM,
                 );
-                Navigator.pop(context);
               }
             },
             child: Text(
@@ -162,6 +199,82 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                                   .myTabs
                                   .indexOf(tabData);
                         });
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Editar Tab'),
+                              content: Column(
+                                children: <Widget>[
+                                  TextField(
+                                    controller: _textController,
+                                    decoration: InputDecoration(
+                                        hintText: "Nombre del Tab"),
+                                  ),
+                                  DropdownButton<IconData>(
+                                    value: _icon,
+                                    onChanged: (IconData? newValue) {
+                                      if (newValue != null) {
+                                        setState(() {
+                                          _icon = newValue;
+                                        });
+                                      }
+                                    },
+                                    items: [
+                                      Icons.home,
+                                      Icons.star,
+                                      Icons.settings
+                                    ].map<DropdownMenuItem<IconData>>(
+                                        (IconData value) {
+                                      return DropdownMenuItem<IconData>(
+                                        value: value,
+                                        child: Icon(value),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ],
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text('Cancelar'),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                                TextButton(
+                                  child: Text('Confirmar edición'),
+                                  onPressed: () {
+                                    if (_textController != null &&
+                                        _icon != null &&
+                                        _textController!.text.isNotEmpty) {
+                                      Provider.of<TabProvider>(context,
+                                              listen: false)
+                                          .updateTab(_tabIndex!,
+                                              _textController!.text, _icon!);
+                                      Fluttertoast.showToast(
+                                        msg: "Tab actualizado",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                      );
+                                      // Restablecer los campos a los valores predeterminados
+                                      setState(() {
+                                        _textController!.clear();
+                                        _icon = Icons.home;
+                                        _tabIndex = null;
+                                      });
+                                      Navigator.of(context).pop();
+                                    } else {
+                                      Fluttertoast.showToast(
+                                        msg:
+                                            "Por favor, proporciona un nombre para el tab",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                      );
+                                    }
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                       child: Text('Editar'),
                     ),
