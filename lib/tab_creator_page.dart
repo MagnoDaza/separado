@@ -42,25 +42,33 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Creador de Tabs'),
+        title: Text('Creador de DinamicsTabs'),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Expanded(
-            child: TextField(
-              controller: _textController,
-              decoration: InputDecoration(
-                labelText: 'Nombre del Tab',
+          Row(
+            children: [
+              iconDropdown(),
+              Expanded(
+                flex: 1,
+                child: TextField(
+                  controller: _textController,
+                  decoration: InputDecoration(
+                    labelText: 'Nombre del Tab',
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-          iconDropdown(),
+          const SizedBox(height: 15),
           createOrEditButton(),
-          SizedBox(height: 10),
-          Text('Ocultar o mostrar nombre'),
+          const SizedBox(height: 15),
           ShowHideNameSwitch(),
-          SizedBox(height: 10),
-          Text('Historial'),
+          const SizedBox(height: 15),
+          const Text('Mis DinamicsTabs',
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 15),
           Expanded(
             child: ReorderableListView(
               onReorder: (oldIndex, newIndex) =>
