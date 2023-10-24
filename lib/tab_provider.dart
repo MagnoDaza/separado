@@ -1,11 +1,10 @@
-//archivo: tab_provider.dart
-
 import 'package:flutter/material.dart';
 import 'tab_data.dart';
 
 class TabProvider with ChangeNotifier {
   List<TabData> myTabs = [TabData(text: 'Tab 1', icon: Icons.home)];
   int maxTabsToShowText = -1;
+  bool showText = true; // Agrega esta línea
 
   void addTab(String name, IconData icon) {
     myTabs.add(TabData(text: name, icon: icon));
@@ -37,11 +36,10 @@ class TabProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // En tu archivo tab_provider.dart
-
-  void toggleShowText(bool value) {
-    for (var tab in myTabs) {
-      tab.showText = value;
+  void toggleShowText() {
+    showText = !showText;
+    for (TabData tab in myTabs) {
+      tab.showText = showText;
     }
     notifyListeners();
   }
