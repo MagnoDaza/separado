@@ -10,7 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
   provider:
-  fluttertoast: ^8.2.2  # Asegúrate de usar la última versión
+  fluttertoast: ^8.2.2 
+  cupertino_icons: ^1.0.5 # Asegúrate de usar la última versión
 
 
 

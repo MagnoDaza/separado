@@ -1,13 +1,14 @@
+//archivo:tab_creator_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'tab_provider.dart';
 import 'show_hide_name_switch.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'tab_data.dart';
+import 'icon_list.dart'; // Importa el archivo icon_list.dart
 
 class TabCreatorPage extends StatefulWidget {
   final int? tabIndex;
-
   TabCreatorPage({this.tabIndex});
 
   @override
@@ -44,71 +45,83 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
       appBar: AppBar(
         title: Text('Creador de DinamicsTabs'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
+      body: SingleChildScrollView(
+        // Permite desplazamiento si el contenido se desborda
+        child: Container(
+          height: MediaQuery.of(context)
+              .size
+              .height, // Proporciona una altura específica
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              iconDropdown(),
-              Expanded(
-                flex: 1,
-                child: TextField(
-                  controller: _textController,
-                  decoration: InputDecoration(
-                    labelText: 'Nombre del Tab',
+              Row(
+                children: [
+                  iconList(), // Reemplaza iconDropdown() con iconList()
+                  Expanded(
+                    flex: 1,
+                    child: TextField(
+                      controller: _textController,
+                      decoration: InputDecoration(
+                        labelText: 'Nombre del Tab',
+                      ),
+                    ),
                   ),
+                ],
+              ),
+              const SizedBox(height: 15),
+              createOrEditButton(),
+              const SizedBox(height: 15),
+              ShowHideNameSwitch(),
+              const SizedBox(height: 15),
+              const Text('Mis DinamicsTabs',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              const SizedBox(height: 15),
+              Expanded(
+                child: ReorderableListView(
+                  onReorder: (oldIndex, newIndex) =>
+                      Provider.of<TabProvider>(context, listen: false)
+                          .reorderTabs(oldIndex, newIndex),
+                  children:
+                      Provider.of<TabProvider>(context).myTabs.map((tabData) {
+                    return ListTile(
+                      key: Key(tabData.text),
+                      leading: Icon(tabData.icon),
+                      title: Text(tabData.text),
+                      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                        editButton(tabData),
+                        deleteButton(tabData),
+                      ]),
+                    );
+                  }).toList(),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 15),
-          createOrEditButton(),
-          const SizedBox(height: 15),
-          ShowHideNameSwitch(),
-          const SizedBox(height: 15),
-          const Text('Mis DinamicsTabs',
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 15),
-          Expanded(
-            child: ReorderableListView(
-              onReorder: (oldIndex, newIndex) =>
-                  Provider.of<TabProvider>(context, listen: false)
-                      .reorderTabs(oldIndex, newIndex),
-              children: Provider.of<TabProvider>(context).myTabs.map((tabData) {
-                return ListTile(
-                  key: Key(tabData.text),
-                  leading: Icon(tabData.icon),
-                  title: Text(tabData.text),
-                  trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                    editButton(tabData),
-                    deleteButton(tabData),
-                  ]),
-                );
-              }).toList(),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget iconDropdown() {
-    return DropdownButton<IconData>(
-      value: _icon,
-      onChanged: (IconData? newValue) {
-        if (newValue != null) {
+  Widget iconList() {
+    // Nueva función iconList
+    return IconButton(
+      icon: Icon(_icon),
+      onPressed: () async {
+        IconData? selectedIcon = await showDialog<IconData>(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              child: IconList(),
+            );
+          },
+        );
+
+        if (selectedIcon != null) {
           setState(() {
-            _icon = newValue;
+            _icon = selectedIcon;
           });
         }
       },
-      items: [Icons.home, Icons.star, Icons.settings]
-          .map<DropdownMenuItem<IconData>>((IconData value) {
-        return DropdownMenuItem<IconData>(
-          value: value,
-          child: Icon(value),
-        );
-      }).toList(),
     );
   }
 
@@ -140,15 +153,23 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmar edición'),
-          content: Column(
-            children: <Widget>[
-              TextField(
-                controller: _textController,
-                decoration: InputDecoration(hintText: "Nombre del Tab"),
+          content: Container(
+            width: MediaQuery.of(context).size.width *
+                0.8, // Ajusta el ancho al 80% del ancho de la pantalla
+            height: MediaQuery.of(context).size.height *
+                0.5, // Ajusta la altura al 50% de la altura de la pantalla
+            child: SingleChildScrollView(
+              // Permite desplazamiento si el contenido se desborda
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    controller: _textController,
+                    decoration: InputDecoration(hintText: "Nombre del Tab"),
+                  ),
+                  iconList(), // Reemplaza iconDropdown() con iconList()
+                ],
               ),
-              iconDropdown(),
-            ],
+            ),
           ),
           actions: <Widget>[
             TextButton(
@@ -184,13 +205,29 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
   }
 
   void createTab() {
-    Provider.of<TabProvider>(context, listen: false)
-        .addTab(_textController!.text, _icon!);
-    Fluttertoast.showToast(
-      msg: "Tab creado",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-    );
+    // Verifica si ya existe una pestaña con el mismo nombre
+    bool tabExists = Provider.of<TabProvider>(context, listen: false)
+        .myTabs
+        .any((tab) => tab.text == _textController!.text);
+
+    if (tabExists) {
+      // Si la pestaña ya existe, muestra un toast de advertencia
+      Fluttertoast.showToast(
+        msg: "No se pueden tener tabs con el mismo nombre",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+    } else {
+      // Si la pestaña no existe, crea la pestaña y limpia el campo de texto
+      Provider.of<TabProvider>(context, listen: false)
+          .addTab(_textController!.text, _icon!);
+      Fluttertoast.showToast(
+        msg: "Tab creado",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+      _textController!.clear();
+    }
   }
 
   Widget editButton(TabData tabData) {
