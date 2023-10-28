@@ -1,4 +1,4 @@
-//archivo:tab_creator_page.dart
+// archivo: tab_creator_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'tab_provider.dart';
@@ -48,9 +48,8 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
       body: SingleChildScrollView(
         // Permite desplazamiento si el contenido se desborda
         child: Container(
-          height: MediaQuery.of(context)
-              .size
-              .height, // Proporciona una altura específica
+          height: MediaQuery.of(context).size.height,
+          // Proporciona una altura específica
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -104,23 +103,28 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
 
   Widget iconList() {
     // Nueva función iconList
-    return IconButton(
-      icon: Icon(_icon),
-      onPressed: () async {
-        IconData? selectedIcon = await showDialog<IconData>(
-          context: context,
-          builder: (BuildContext context) {
-            return Dialog(
-              child: IconList(),
+    return StatefulBuilder(
+      // Añade StatefulBuilder
+      builder: (BuildContext context, StateSetter setState) {
+        return IconButton(
+          icon: Icon(_icon),
+          onPressed: () async {
+            IconData? selectedIcon = await showDialog<IconData>(
+              context: context,
+              builder: (BuildContext context) {
+                return Dialog(
+                  child: IconList(),
+                );
+              },
             );
+            if (selectedIcon != null) {
+              setState(() {
+                // Actualiza el estado del ícono seleccionado
+                _icon = selectedIcon;
+              });
+            }
           },
         );
-
-        if (selectedIcon != null) {
-          setState(() {
-            _icon = selectedIcon;
-          });
-        }
       },
     );
   }
@@ -132,7 +136,7 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
             _icon != null &&
             _textController!.text.isNotEmpty) {
           if (_tabIndex != null) {
-            editTabDialog();
+            editTab();
           } else {
             createTab();
           }
@@ -145,47 +149,6 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
         }
       },
       child: Text(_tabIndex != null ? 'Confirmar edición' : 'Crear nuevo tab'),
-    );
-  }
-
-  void editTabDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Container(
-            width: MediaQuery.of(context).size.width *
-                0.8, // Ajusta el ancho al 80% del ancho de la pantalla
-            height: MediaQuery.of(context).size.height *
-                0.5, // Ajusta la altura al 50% de la altura de la pantalla
-            child: SingleChildScrollView(
-              // Permite desplazamiento si el contenido se desborda
-              child: Column(
-                children: <Widget>[
-                  TextField(
-                    controller: _textController,
-                    decoration: InputDecoration(hintText: "Nombre del Tab"),
-                  ),
-                  iconList(), // Reemplaza iconDropdown() con iconList()
-                ],
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancelar'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: Text('Confirmar edición'),
-              onPressed: () {
-                editTab();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -230,27 +193,71 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
     }
   }
 
+  // Define un widget para el botón de edición
+// Define un widget para el botón de edición
   Widget editButton(TabData tabData) {
+    // Retorna un botón elevado
     return ElevatedButton(
+      // Cuando se presiona el botón
       onPressed: () {
-        setState(() {
-          _textController = TextEditingController(text: tabData.text);
-          _icon = tabData.icon;
-          _tabIndex = Provider.of<TabProvider>(context, listen: false)
-              .myTabs
-              .indexOf(tabData);
-        });
-        editTabDialog();
+        // Crea un nuevo controlador de texto con el texto del tabData
+        _textController = TextEditingController(text: tabData.text);
+        // Establece el icono actual al icono del tabData
+        _icon = tabData.icon;
+        // Encuentra el índice del tabData en la lista de tabs
+        _tabIndex = Provider.of<TabProvider>(context, listen: false)
+            .myTabs
+            .indexOf(tabData);
+        // Muestra un diálogo
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            // Retorna un SimpleDialog
+            return SimpleDialog(
+              // Establece el título del SimpleDialog
+              title: Text('Editar Tab'),
+              // Define los hijos del SimpleDialog
+              children: <Widget>[
+                // Un campo de texto para editar el nombre del tab
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: TextField(
+                    controller: _textController,
+                    decoration: InputDecoration(hintText: "Nombre del Tab"),
+                  ),
+                ),
+                // La lista de iconos para seleccionar un nuevo icono
+                iconList(),
+                // Un ButtonBar para los botones de acción
+                ButtonBar(
+                  children: <Widget>[
+                    // Un botón para cancelar la edición
+                    TextButton(
+                      child: Text('Cancelar'),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                    // Un botón para confirmar la edición
+                    TextButton(
+                      child: Text('Confirmar edición'),
+                      onPressed: () {
+                        editTab();
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        );
       },
-      child: Text('Editar'),
+      child: Text('Editar'), // El texto que se muestra en el botón elevado
     );
   }
 
   Widget deleteButton(TabData tabData) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        primary: Colors.red,
-      ),
+      style: ElevatedButton.styleFrom(primary: Colors.red),
       onPressed: () => showDialog(
         context: context,
         builder: (BuildContext context) {
