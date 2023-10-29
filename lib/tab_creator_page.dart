@@ -5,7 +5,8 @@ import 'tab_provider.dart';
 import 'show_hide_name_switch.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'tab_data.dart';
-import 'icon_list.dart'; // Importa el archivo icon_list.dart
+import 'icon_list.dart';
+import 'tab_organizer_page.dart'; // Asegúrate de importar TabOrganizerPage
 
 class TabCreatorPage extends StatefulWidget {
   final int? tabIndex;
@@ -46,16 +47,14 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
         title: Text('Creador de DinamicsTabs'),
       ),
       body: SingleChildScrollView(
-        // Permite desplazamiento si el contenido se desborda
         child: Container(
           height: MediaQuery.of(context).size.height,
-          // Proporciona una altura específica
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  iconList(), // Reemplaza iconDropdown() con iconList()
+                  iconList(),
                   Expanded(
                     flex: 1,
                     child: TextField(
@@ -72,14 +71,25 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
               const SizedBox(height: 15),
               ShowHideNameSwitch(),
               const SizedBox(height: 15),
+              ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        child: TabOrganizerPage(),
+                      );
+                    },
+                  );
+                },
+                child: Text('Organizar los tabs'),
+              ),
+              const SizedBox(height: 15),
               const Text('Mis DinamicsTabs',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 15),
               Expanded(
-                child: ReorderableListView(
-                  onReorder: (oldIndex, newIndex) =>
-                      Provider.of<TabProvider>(context, listen: false)
-                          .reorderTabs(oldIndex, newIndex),
+                child: ListView(
                   children:
                       Provider.of<TabProvider>(context).myTabs.map((tabData) {
                     return ListTile(
@@ -102,9 +112,7 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
   }
 
   Widget iconList() {
-    // Nueva función iconList
     return StatefulBuilder(
-      // Añade StatefulBuilder
       builder: (BuildContext context, StateSetter setState) {
         return IconButton(
           icon: Icon(_icon),
@@ -119,7 +127,6 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
             );
             if (selectedIcon != null) {
               setState(() {
-                // Actualiza el estado del ícono seleccionado
                 _icon = selectedIcon;
               });
             }
@@ -168,20 +175,16 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
   }
 
   void createTab() {
-    // Verifica si ya existe una pestaña con el mismo nombre
     bool tabExists = Provider.of<TabProvider>(context, listen: false)
         .myTabs
         .any((tab) => tab.text == _textController!.text);
-
     if (tabExists) {
-      // Si la pestaña ya existe, muestra un toast de advertencia
       Fluttertoast.showToast(
         msg: "No se pueden tener tabs con el mismo nombre",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
       );
     } else {
-      // Si la pestaña no existe, crea la pestaña y limpia el campo de texto
       Provider.of<TabProvider>(context, listen: false)
           .addTab(_textController!.text, _icon!);
       Fluttertoast.showToast(
@@ -193,32 +196,20 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
     }
   }
 
-  // Define un widget para el botón de edición
-// Define un widget para el botón de edición
   Widget editButton(TabData tabData) {
-    // Retorna un botón elevado
     return ElevatedButton(
-      // Cuando se presiona el botón
       onPressed: () {
-        // Crea un nuevo controlador de texto con el texto del tabData
         _textController = TextEditingController(text: tabData.text);
-        // Establece el icono actual al icono del tabData
         _icon = tabData.icon;
-        // Encuentra el índice del tabData en la lista de tabs
         _tabIndex = Provider.of<TabProvider>(context, listen: false)
             .myTabs
             .indexOf(tabData);
-        // Muestra un diálogo
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            // Retorna un SimpleDialog
             return SimpleDialog(
-              // Establece el título del SimpleDialog
               title: Text('Editar Tab'),
-              // Define los hijos del SimpleDialog
               children: <Widget>[
-                // Un campo de texto para editar el nombre del tab
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24),
                   child: TextField(
@@ -226,17 +217,13 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                     decoration: InputDecoration(hintText: "Nombre del Tab"),
                   ),
                 ),
-                // La lista de iconos para seleccionar un nuevo icono
                 iconList(),
-                // Un ButtonBar para los botones de acción
                 ButtonBar(
                   children: <Widget>[
-                    // Un botón para cancelar la edición
                     TextButton(
                       child: Text('Cancelar'),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
-                    // Un botón para confirmar la edición
                     TextButton(
                       child: Text('Confirmar edición'),
                       onPressed: () {
@@ -251,7 +238,7 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
           },
         );
       },
-      child: Text('Editar'), // El texto que se muestra en el botón elevado
+      child: Text('Editar'),
     );
   }
 
