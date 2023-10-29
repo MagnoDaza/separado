@@ -192,7 +192,8 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
       );
-      _textController!.clear();
+      _textController!.clear(); //esto limpia el lienzo despues de crear el tabs
+      FocusScope.of(context).unfocus(); // Esto ocultará el teclado
     }
   }
 
