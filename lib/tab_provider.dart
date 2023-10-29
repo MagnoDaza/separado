@@ -51,4 +51,18 @@ class TabProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  bool customNamesEnabled = false;
+
+  void toggleCustomNamesEnabled() {
+    customNamesEnabled = !customNamesEnabled;
+    notifyListeners();
+  }
+
+  void showAllTabNames() {
+    for (TabData tab in myTabs) {
+      tab.showText = true;
+    }
+    notifyListeners();
+  }
 }
