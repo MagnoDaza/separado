@@ -1,3 +1,4 @@
+//archivo show_hide_name_switch.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'tab_provider.dart';
