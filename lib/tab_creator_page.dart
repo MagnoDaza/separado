@@ -1,16 +1,15 @@
-// archivo: tab_creator_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'tab_provider.dart'; // Asegúrate de importar TabProvider
-import 'show_hide_name_switch.dart';
+import 'tab_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'tab_data.dart';
 import 'icon_list.dart';
 import 'tab_organizer_page.dart';
+import 'show_hide_tabs_page.dart';
 
 class TabCreatorPage extends StatefulWidget {
   final int? tabIndex;
+
   TabCreatorPage({this.tabIndex});
 
   @override
@@ -70,34 +69,13 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
               const SizedBox(height: 15),
               createOrEditButton(),
               const SizedBox(height: 15),
-              ShowHideNameSwitch(),
-              const SizedBox(height: 15),
               ElevatedButton(
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Mostrar Tabs'),
-                        content: Text('¿Quieres mostrar todos los tabs?'),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text('Cancelar'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          TextButton(
-                            child: Text('Confirmar'),
-                            onPressed: () {
-                              Provider.of<TabProvider>(context, listen: false)
-                                  .toggleShowAllTabs();
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ShowHideTabsPage(),
+                    ),
                   );
                 },
                 child: Text('Mostrar Tabs'),
@@ -122,17 +100,19 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
               const SizedBox(height: 15),
               Expanded(
                 child: ListView(
-                    children:
-                        Provider.of<TabProvider>(context).myTabs.map((tabData) {
-                  return ListTile(
-                    key: Key(tabData.text),
-                    leading: Icon(tabData.icon),
-                    title: Text(tabData.text),
-                    trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [editButton(tabData), deleteButton(tabData)]),
-                  );
-                }).toList()),
+                  children:
+                      Provider.of<TabProvider>(context).myTabs.map((tabData) {
+                    return ListTile(
+                      key: Key(tabData.text),
+                      leading: Icon(tabData.icon),
+                      title: Text(tabData.text),
+                      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                        editButton(tabData),
+                        deleteButton(tabData)
+                      ]),
+                    );
+                  }).toList(),
+                ),
               ),
             ],
           ),
@@ -140,8 +120,6 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
       ),
     );
   }
-
-  // ... el resto de tus funciones ...
 
   Widget iconList() {
     return StatefulBuilder(
@@ -224,93 +202,105 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
       );
-      _textController!.clear(); //esto limpia el lienzo despues de crear el tabs
-      FocusScope.of(context).unfocus(); // Esto ocultará el teclado
+      _textController!.clear();
+      FocusScope.of(context).unfocus();
     }
   }
 
-  Widget editButton(TabData tabData) {
-    return ElevatedButton(
-      onPressed: () {
-        _textController = TextEditingController(text: tabData.text);
-        _icon = tabData.icon;
-        _tabIndex = Provider.of<TabProvider>(context, listen: false)
-            .myTabs
-            .indexOf(tabData);
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return SimpleDialog(
-              title: Text('Editar Tab'),
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
-                  child: TextField(
-                    controller: _textController,
-                    decoration: InputDecoration(hintText: "Nombre del Tab"),
+  Widget deleteButton(TabData tabData) {
+    return Column(
+      children: [
+        Text('Nombre'),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(primary: Colors.red),
+          onPressed: () => showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Confirmar eliminación'),
+                content:
+                    Text('¿Estás seguro de que quieres eliminar este tab?'),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text('Cancelar'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
                   ),
-                ),
-                iconList(),
-                ButtonBar(
-                  children: <Widget>[
-                    TextButton(
-                      child: Text('Cancelar'),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                    TextButton(
-                      child: Text('Confirmar edición'),
-                      onPressed: () {
-                        editTab();
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            );
-          },
-        );
-      },
-      child: Text('Editar'),
+                  TextButton(
+                    child: Text('Eliminar'),
+                    onPressed: () {
+                      Provider.of<TabProvider>(context, listen: false)
+                          .removeTab(
+                              Provider.of<TabProvider>(context, listen: false)
+                                  .myTabs
+                                  .indexOf(tabData));
+                      Navigator.of(context).pop();
+                      Fluttertoast.showToast(
+                        msg: "Tab eliminado",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
+          child: Text('Eliminar'),
+        ),
+      ],
     );
   }
 
-  Widget deleteButton(TabData tabData) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(primary: Colors.red),
-      onPressed: () => showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Confirmar eliminación'),
-            content: Text('¿Estás seguro de que quieres eliminar este tab?'),
-            actions: <Widget>[
-              TextButton(
-                child: Text('Cancelar'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text('Eliminar'),
-                onPressed: () {
-                  Provider.of<TabProvider>(context, listen: false).removeTab(
-                      Provider.of<TabProvider>(context, listen: false)
-                          .myTabs
-                          .indexOf(tabData));
-                  Navigator.of(context).pop();
-                  Fluttertoast.showToast(
-                    msg: "Tab eliminado",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                  );
-                },
-              ),
-            ],
-          );
-        },
-      ),
-      child: Text('Eliminar'),
+  Widget editButton(TabData tabData) {
+    return Column(
+      children: [
+        Text('Icono'),
+        ElevatedButton(
+          onPressed: () {
+            _textController = TextEditingController(text: tabData.text);
+            _icon = tabData.icon;
+            _tabIndex = Provider.of<TabProvider>(context, listen: false)
+                .myTabs
+                .indexOf(tabData);
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return SimpleDialog(
+                  title: Text('Editar Tab'),
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: TextField(
+                        controller: _textController,
+                        decoration: InputDecoration(hintText: "Nombre del Tab"),
+                      ),
+                    ),
+                    iconList(),
+                    ButtonBar(
+                      children: <Widget>[
+                        TextButton(
+                          child: Text('Cancelar'),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        TextButton(
+                          child: Text('Confirmar edición'),
+                          onPressed: () {
+                            editTab();
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          child: Text('Editar'),
+        ),
+      ],
     );
   }
 }

@@ -1,7 +1,5 @@
-//archivo: my_home_page.dart
-
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Añade esta línea
+import 'package:provider/provider.dart';
 import 'tab_creator_page.dart';
 import 'tab_provider.dart';
 
@@ -22,10 +20,13 @@ class MyHomePage extends StatelessWidget {
                   isScrollable: true,
                   tabs: tabProvider.myTabs
                       .map((tabData) => Container(
-                          width: MediaQuery.of(context).size.width / 5,
-                          child: Tab(
-                              text: tabData.showText ? tabData.text : null,
-                              icon: Icon(tabData.icon))))
+                            width: MediaQuery.of(context).size.width / 5,
+                            child: Tab(
+                              text: tabData.hideName ? null : tabData.text,
+                              icon:
+                                  tabData.hideIcon ? null : Icon(tabData.icon),
+                            ),
+                          ))
                       .toList(),
                 ),
               ),

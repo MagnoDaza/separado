@@ -1,11 +1,13 @@
-//archivo tap_provider.dart
 import 'package:flutter/material.dart';
 import 'tab_data.dart';
 
 class TabProvider with ChangeNotifier {
   List<TabData> myTabs = [TabData(text: 'Tab 1', icon: Icons.home)];
   int maxTabsToShowText = -1;
-  bool showText = true; // Agrega esta línea
+  bool showText = true;
+  bool customNamesEnabled = false;
+  bool hideTabNames = false;
+  bool hideTabIcons = false;
 
   void addTab(String name, IconData icon) {
     myTabs.add(TabData(text: name, icon: icon));
@@ -52,10 +54,12 @@ class TabProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  bool customNamesEnabled = false;
-
   void toggleCustomNamesEnabled() {
     customNamesEnabled = !customNamesEnabled;
+    if (customNamesEnabled) {
+      showText =
+          false; // Desactiva "mostrar u ocultar nombre" cuando "nombre e icono personalizado" está activado
+    }
     notifyListeners();
   }
 
@@ -63,6 +67,16 @@ class TabProvider with ChangeNotifier {
     for (TabData tab in myTabs) {
       tab.showText = true;
     }
+    notifyListeners();
+  }
+
+  void toggleHideTabNames() {
+    hideTabNames = !hideTabNames;
+    notifyListeners();
+  }
+
+  void toggleHideTabIcons() {
+    hideTabIcons = !hideTabIcons;
     notifyListeners();
   }
 }
