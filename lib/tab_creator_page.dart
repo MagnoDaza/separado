@@ -1,12 +1,13 @@
 // archivo: tab_creator_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'tab_provider.dart';
+import 'tab_provider.dart'; // Asegúrate de importar TabProvider
 import 'show_hide_name_switch.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'tab_data.dart';
 import 'icon_list.dart';
-import 'tab_organizer_page.dart'; // Asegúrate de importar TabOrganizerPage
+import 'tab_organizer_page.dart';
 
 class TabCreatorPage extends StatefulWidget {
   final int? tabIndex;
@@ -76,6 +77,37 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Mostrar Tabs'),
+                        content: Text('¿Quieres mostrar todos los tabs?'),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text('Cancelar'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: Text('Confirmar'),
+                            onPressed: () {
+                              Provider.of<TabProvider>(context, listen: false)
+                                  .toggleShowAllTabs();
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Text('Mostrar Tabs'),
+              ),
+              const SizedBox(height: 15),
+              ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
                       return Dialog(
                         child: TabOrganizerPage(),
                       );
@@ -90,19 +122,17 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
               const SizedBox(height: 15),
               Expanded(
                 child: ListView(
-                  children:
-                      Provider.of<TabProvider>(context).myTabs.map((tabData) {
-                    return ListTile(
-                      key: Key(tabData.text),
-                      leading: Icon(tabData.icon),
-                      title: Text(tabData.text),
-                      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                        editButton(tabData),
-                        deleteButton(tabData),
-                      ]),
-                    );
-                  }).toList(),
-                ),
+                    children:
+                        Provider.of<TabProvider>(context).myTabs.map((tabData) {
+                  return ListTile(
+                    key: Key(tabData.text),
+                    leading: Icon(tabData.icon),
+                    title: Text(tabData.text),
+                    trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [editButton(tabData), deleteButton(tabData)]),
+                  );
+                }).toList()),
               ),
             ],
           ),
@@ -110,6 +140,8 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
       ),
     );
   }
+
+  // ... el resto de tus funciones ...
 
   Widget iconList() {
     return StatefulBuilder(

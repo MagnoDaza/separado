@@ -44,4 +44,11 @@ class TabProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void toggleShowAllTabs() {
+    for (TabData tab in myTabs) {
+      tab.showText = !tab.showText;
+    }
+    notifyListeners();
+  }
 }
