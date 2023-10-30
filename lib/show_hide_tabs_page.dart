@@ -82,7 +82,7 @@ class ShowHideTabsPage extends StatelessWidget {
                               ),
                               Column(
                                 children: [
-                                  Icon(Icons.image, size: 20.0),
+                                  Icon(Icons.hide_image, size: 20.0),
                                   SizedBox(width: 20.0),
                                   Checkbox(
                                     value: tabData.hideIcon,

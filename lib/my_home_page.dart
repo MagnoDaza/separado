@@ -22,9 +22,8 @@ class MyHomePage extends StatelessWidget {
                       .map((tabData) => Container(
                             width: MediaQuery.of(context).size.width / 5,
                             child: Tab(
-                              text: tabData.hideName ? null : tabData.text,
-                              icon:
-                                  tabData.hideIcon ? null : Icon(tabData.icon),
+                              text: tabData.showText ? tabData.text : null,
+                              icon: Icon(tabData.icon),
                             ),
                           ))
                       .toList(),

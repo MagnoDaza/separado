@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'tab_provider.dart';
 
@@ -13,8 +14,15 @@ class ShowHideNameSwitch extends StatelessWidget {
           onChanged: tabProvider.customNamesEnabled
               ? null
               : (bool value) {
-                  // Desactiva el switch si "nombre e icono personalizado" está activado
+// Desactiva el switch si "nombre e icono personalizado" está activado
                   tabProvider.toggleShowText();
+                  Fluttertoast.showToast(
+                    msg: tabProvider.showText
+                        ? "Nombre mostrado"
+                        : "Nombre ocultado",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                  );
                 },
         );
       },
