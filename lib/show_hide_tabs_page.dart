@@ -39,10 +39,12 @@ class ShowHideTabsPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   Expanded(
-                    child: ListView(
-                      children: Provider.of<TabProvider>(context)
-                          .myTabs
-                          .map((tabData) {
+                    child: ListView.builder(
+                      itemCount:
+                          Provider.of<TabProvider>(context).myTabs.length,
+                      itemBuilder: (context, index) {
+                        var tabData =
+                            Provider.of<TabProvider>(context).myTabs[index];
                         return ListTile(
                           key: Key(tabData.text),
                           leading: Icon(tabData.icon),
@@ -50,16 +52,10 @@ class ShowHideTabsPage extends StatelessWidget {
                           trailing:
                               Row(mainAxisSize: MainAxisSize.min, children: [
                             Padding(
-                              // Agregado padding a la izquierda
-                              padding: EdgeInsets.only(right: 25.0),
+                              padding: EdgeInsets.only(right: 20.0),
                               child: Column(
                                 children: [
-                                  Icon(Icons.text_fields,
-                                      size:
-                                          20.0), // Reemplaza el texto por un icono
-                                  SizedBox(
-                                    height: 0.0,
-                                  ), // Agrega espacio entre los elementos
+                                  Icon(Icons.text_fields, size: 20.0),
                                   Checkbox(
                                     value: tabData.hideName,
                                     onChanged: (bool? value) {
@@ -75,17 +71,16 @@ class ShowHideTabsPage extends StatelessWidget {
                                       }
                                     },
                                   ),
+                                  SizedBox(
+                                      height:
+                                          0), // Agrega espacio entre los elementos
                                 ],
                               ),
                             ),
                             Column(
                               children: [
-                                Icon(Icons.image,
-                                    size:
-                                        20.0), // Reemplaza el texto por un icono
-                                SizedBox(
-                                  width: 20.0,
-                                ), // Agrega espacio entre los elementos
+                                Icon(Icons.image, size: 20.0),
+                                SizedBox(width: 20.0),
                                 Checkbox(
                                   value: tabData.hideIcon,
                                   onChanged: (bool? value) {
@@ -101,11 +96,14 @@ class ShowHideTabsPage extends StatelessWidget {
                                     }
                                   },
                                 ),
+                                SizedBox(
+                                    width:
+                                        0), // Agrega espacio entre los elementos
                               ],
                             ),
                           ]),
                         );
-                      }).toList(),
+                      },
                     ),
                   ),
                 ],
