@@ -40,33 +40,59 @@ class ShowHideTabsPage extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 20),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount:
-                          Provider.of<TabProvider>(context).myTabs.length,
-                      itemBuilder: (context, index) {
-                        var tabData =
-                            Provider.of<TabProvider>(context).myTabs[index];
-                        return ListTile(
-                          key: Key(tabData.text),
-                          leading: Icon(tabData.icon),
-                          title: Text(tabData.text),
-                          trailing:
-                              Row(mainAxisSize: MainAxisSize.min, children: [
-                            Padding(
-                              padding: EdgeInsets.only(right: 20.0),
-                              child: Column(
+                  if (tabProvider.customNamesEnabled) // Agrega esta línea
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount:
+                            Provider.of<TabProvider>(context).myTabs.length,
+                        itemBuilder: (context, index) {
+                          var tabData =
+                              Provider.of<TabProvider>(context).myTabs[index];
+                          return ListTile(
+                            key: Key(tabData.text),
+                            leading: Icon(tabData.icon),
+                            title: Text(tabData.text),
+                            trailing:
+                                Row(mainAxisSize: MainAxisSize.min, children: [
+                              Padding(
+                                padding: EdgeInsets.only(right: 20.0),
+                                child: Column(
+                                  children: [
+                                    Icon(Icons.text_fields, size: 20.0),
+                                    Checkbox(
+                                      value: tabData.hideName,
+                                      onChanged: (bool? value) {
+                                        if (value != null) {
+                                          tabData.toggleHideName();
+                                          Fluttertoast.showToast(
+                                            msg: tabData.hideName
+                                                ? "Nombre ocultado"
+                                                : "Nombre mostrado",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                          );
+                                        }
+                                      },
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            0), // Agrega espacio entre los elementos
+                                  ],
+                                ),
+                              ),
+                              Column(
                                 children: [
-                                  Icon(Icons.text_fields, size: 20.0),
+                                  Icon(Icons.image, size: 20.0),
+                                  SizedBox(width: 20.0),
                                   Checkbox(
-                                    value: tabData.hideName,
+                                    value: tabData.hideIcon,
                                     onChanged: (bool? value) {
                                       if (value != null) {
-                                        tabData.toggleHideName();
+                                        tabData.toggleHideIcon();
                                         Fluttertoast.showToast(
-                                          msg: tabData.hideName
-                                              ? "Nombre ocultado"
-                                              : "Nombre mostrado",
+                                          msg: tabData.hideIcon
+                                              ? "Icono ocultado"
+                                              : "Icono mostrado",
                                           toastLength: Toast.LENGTH_SHORT,
                                           gravity: ToastGravity.BOTTOM,
                                         );
@@ -74,40 +100,15 @@ class ShowHideTabsPage extends StatelessWidget {
                                     },
                                   ),
                                   SizedBox(
-                                      height:
+                                      width:
                                           0), // Agrega espacio entre los elementos
                                 ],
                               ),
-                            ),
-                            Column(
-                              children: [
-                                Icon(Icons.image, size: 20.0),
-                                SizedBox(width: 20.0),
-                                Checkbox(
-                                  value: tabData.hideIcon,
-                                  onChanged: (bool? value) {
-                                    if (value != null) {
-                                      tabData.toggleHideIcon();
-                                      Fluttertoast.showToast(
-                                        msg: tabData.hideIcon
-                                            ? "Icono ocultado"
-                                            : "Icono mostrado",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                      );
-                                    }
-                                  },
-                                ),
-                                SizedBox(
-                                    width:
-                                        0), // Agrega espacio entre los elementos
-                              ],
-                            ),
-                          ]),
-                        );
-                      },
+                            ]),
+                          );
+                        },
+                      ),
                     ),
-                  ),
                 ],
               );
             },
