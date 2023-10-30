@@ -8,7 +8,7 @@ class ShowHideNameSwitch extends StatelessWidget {
     return Consumer<TabProvider>(
       builder: (context, tabProvider, child) {
         return SwitchListTile(
-          title: Text('Mostrar u ocultar nombre'),
+          title: const Text('Mostrar u ocultar nombre'),
           value: tabProvider.showText,
           onChanged: tabProvider.customNamesEnabled
               ? null

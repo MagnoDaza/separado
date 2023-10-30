@@ -1,11 +1,9 @@
-// archivo show_hide_tabs_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'tab_provider.dart';
 import 'show_hide_name_switch.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-// archivo: show_hide_tabs_page.dart
 class ShowHideTabsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -39,7 +37,7 @@ class ShowHideTabsPage extends StatelessWidget {
                       );
                     },
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 20),
                   Expanded(
                     child: ListView(
                       children: Provider.of<TabProvider>(context)
@@ -51,21 +49,59 @@ class ShowHideTabsPage extends StatelessWidget {
                           title: Text(tabData.text),
                           trailing:
                               Row(mainAxisSize: MainAxisSize.min, children: [
-                            Checkbox(
-                              value: tabData.hideName,
-                              onChanged: (bool? value) {
-                                if (value != null) {
-                                  tabData.toggleHideName();
-                                }
-                              },
+                            Padding(
+                              // Agregado padding a la izquierda
+                              padding: EdgeInsets.only(right: 25.0),
+                              child: Column(
+                                children: [
+                                  Icon(Icons.text_fields,
+                                      size:
+                                          20.0), // Reemplaza el texto por un icono
+                                  SizedBox(
+                                    height: 0.0,
+                                  ), // Agrega espacio entre los elementos
+                                  Checkbox(
+                                    value: tabData.hideName,
+                                    onChanged: (bool? value) {
+                                      if (value != null) {
+                                        tabData.toggleHideName();
+                                        Fluttertoast.showToast(
+                                          msg: tabData.hideName
+                                              ? "Nombre ocultado"
+                                              : "Nombre mostrado",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
-                            Checkbox(
-                              value: tabData.hideIcon,
-                              onChanged: (bool? value) {
-                                if (value != null) {
-                                  tabData.toggleHideIcon();
-                                }
-                              },
+                            Column(
+                              children: [
+                                Icon(Icons.image,
+                                    size:
+                                        20.0), // Reemplaza el texto por un icono
+                                SizedBox(
+                                  width: 20.0,
+                                ), // Agrega espacio entre los elementos
+                                Checkbox(
+                                  value: tabData.hideIcon,
+                                  onChanged: (bool? value) {
+                                    if (value != null) {
+                                      tabData.toggleHideIcon();
+                                      Fluttertoast.showToast(
+                                        msg: tabData.hideIcon
+                                            ? "Icono ocultado"
+                                            : "Icono mostrado",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                      );
+                                    }
+                                  },
+                                ),
+                              ],
                             ),
                           ]),
                         );
