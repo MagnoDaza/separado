@@ -23,9 +23,9 @@ class ShowHideTabsPage extends StatelessWidget {
                 children: <Widget>[
                   ShowHideNameSwitch(),
                   const SizedBox(height: 15),
-                  ShowHideIconSwitch(), // Agrega el nuevo widget aquí
+                  ShowHideIconSwitch(),
                   const SizedBox(height: 15),
-                  Divider(), // Agrega una línea horizontal aquí
+                  Divider(),
                   const SizedBox(height: 15),
                   const Text('Nombres e iconos personalizados',
                       style: TextStyle(fontWeight: FontWeight.bold)),
@@ -45,7 +45,7 @@ class ShowHideTabsPage extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 20),
-                  if (tabProvider.customNamesEnabled) // Agrega esta línea
+                  if (tabProvider.customNamesEnabled)
                     Expanded(
                       child: ListView.builder(
                         itemCount:
@@ -55,8 +55,9 @@ class ShowHideTabsPage extends StatelessWidget {
                               Provider.of<TabProvider>(context).myTabs[index];
                           return ListTile(
                             key: Key(tabData.text),
-                            leading: Icon(tabData.icon),
-                            title: Text(tabData.text),
+                            leading:
+                                tabData.showIcon ? Icon(tabData.icon) : null,
+                            title: tabData.showText ? Text(tabData.text) : null,
                             trailing:
                                 Row(mainAxisSize: MainAxisSize.min, children: [
                               Padding(
@@ -65,14 +66,18 @@ class ShowHideTabsPage extends StatelessWidget {
                                   children: [
                                     Icon(Icons.text_fields, size: 20.0),
                                     Checkbox(
-                                      value: tabData.hideName,
+                                      value: tabData.showText,
                                       onChanged: (bool? value) {
                                         if (value != null) {
-                                          tabData.toggleHideName();
+                                          tabData.showText = value;
+                                          if (!tabData.showText &&
+                                              !tabData.showIcon) {
+                                            tabData.showIcon = true;
+                                          }
                                           Fluttertoast.showToast(
-                                            msg: tabData.hideName
-                                                ? "Nombre ocultado"
-                                                : "Nombre mostrado",
+                                            msg: tabData.showText
+                                                ? "Nombre mostrado"
+                                                : "Nombre ocultado",
                                             toastLength: Toast.LENGTH_SHORT,
                                             gravity: ToastGravity.BOTTOM,
                                           );
@@ -81,7 +86,7 @@ class ShowHideTabsPage extends StatelessWidget {
                                     ),
                                     SizedBox(
                                       height: 0,
-                                    ), // Agrega espacio entre los elementos
+                                    ),
                                   ],
                                 ),
                               ),
@@ -90,14 +95,18 @@ class ShowHideTabsPage extends StatelessWidget {
                                   Icon(Icons.hide_image, size: 20.0),
                                   SizedBox(width: 20.0),
                                   Checkbox(
-                                    value: tabData.hideIcon,
+                                    value: tabData.showIcon,
                                     onChanged: (bool? value) {
                                       if (value != null) {
-                                        tabData.toggleHideIcon();
+                                        tabData.showIcon = value;
+                                        if (!tabData.showText &&
+                                            !tabData.showIcon) {
+                                          tabData.showText = true;
+                                        }
                                         Fluttertoast.showToast(
-                                          msg: tabData.hideIcon
-                                              ? "Icono ocultado"
-                                              : "Icono mostrado",
+                                          msg: tabData.showIcon
+                                              ? "Icono mostrado"
+                                              : "Icono ocultado",
                                           toastLength: Toast.LENGTH_SHORT,
                                           gravity: ToastGravity.BOTTOM,
                                         );
@@ -106,7 +115,7 @@ class ShowHideTabsPage extends StatelessWidget {
                                   ),
                                   SizedBox(
                                     width: 0,
-                                  ), // Agrega espacio entre los elementos
+                                  ),
                                 ],
                               ),
                             ]),

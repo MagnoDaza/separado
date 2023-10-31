@@ -1,8 +1,7 @@
-//my_home_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'tab_creator_page.dart';
 import 'tab_provider.dart';
+import 'tab_creator_page.dart';
 
 class MyHomePage extends StatelessWidget {
   @override
@@ -23,7 +22,9 @@ class MyHomePage extends StatelessWidget {
                       .map((tabData) => Container(
                             width: MediaQuery.of(context).size.width / 5,
                             child: Tab(
-                              text: tabData.showText ? tabData.text : null,
+                              text: tabData.showText
+                                  ? tabData.text
+                                  : null, // Modifica esta línea
                               icon: tabData.showIcon
                                   ? Icon(tabData.icon)
                                   : null, // Modifica esta línea
