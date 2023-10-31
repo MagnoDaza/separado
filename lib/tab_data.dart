@@ -1,4 +1,3 @@
-// archivo: tab_data.dart
 import 'package:flutter/material.dart';
 
 class TabData {
@@ -24,9 +23,5 @@ class TabData {
 
   void toggleHideIcon() {
     hideIcon = !hideIcon;
-  }
-
-  void toggleShowIcon() {
-    showIcon = !showIcon;
   }
 }

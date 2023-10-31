@@ -10,7 +10,6 @@ import 'show_hide_tabs_page.dart';
 
 class TabCreatorPage extends StatefulWidget {
   final int? tabIndex;
-
   TabCreatorPage({this.tabIndex});
 
   @override
@@ -105,7 +104,9 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                       Provider.of<TabProvider>(context).myTabs.map((tabData) {
                     return ListTile(
                       key: Key(tabData.text),
-                      leading: Icon(tabData.icon),
+                      leading: tabData.showIcon
+                          ? Icon(tabData.icon)
+                          : null, // Modifica esta línea
                       title: Text(tabData.text),
                       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                         editButton(tabData),
@@ -121,6 +122,8 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
       ),
     );
   }
+
+// Resto del código...
 
   Widget iconList() {
     return StatefulBuilder(

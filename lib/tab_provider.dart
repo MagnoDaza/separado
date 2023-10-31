@@ -30,12 +30,9 @@ class TabProvider with ChangeNotifier {
 
   void toggleShowText() {
     if (!showIcons && showText) {
-      return;
-    }
-    showText = !showText;
-    if (!showText && !showIcons) {
       _showIcons = true;
     }
+    showText = !showText;
     for (TabData tab in myTabs) {
       tab.showText = showText;
     }
@@ -44,14 +41,11 @@ class TabProvider with ChangeNotifier {
 
   void toggleShowIcons() {
     if (!showText && showIcons) {
-      return;
-    }
-    _showIcons = !_showIcons;
-    if (!showText && !showIcons) {
       showText = true;
     }
+    _showIcons = !_showIcons;
     for (TabData tab in myTabs) {
-      tab.showIcon = _showIcons;
+      tab.showIcon = _showIcons; // Modifica esta línea
     }
     notifyListeners();
   }
@@ -63,7 +57,7 @@ class TabProvider with ChangeNotifier {
       _showIcons = false;
       for (TabData tab in myTabs) {
         tab.showText = false;
-        tab.showIcon = false;
+        tab.showIcon = false; // Modifica esta línea
       }
     }
     notifyListeners();
