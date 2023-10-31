@@ -57,10 +57,19 @@ class ShowHideTabsPage extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Text('Icons'),
-                                  Text('Name Tabs'),
-                                  Icon(Icons.text_fields, size: 20.0),
-                                  Icon(Icons.image, size: 20.0),
+                                  Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text('Icons')),
+                                  Align(
+                                      alignment: Alignment.center,
+                                      child: Text('Name Tabs')),
+                                  Align(
+                                      alignment: Alignment.center,
+                                      child:
+                                          Icon(Icons.text_fields, size: 20.0)),
+                                  Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Icon(Icons.image, size: 20.0)),
                                 ],
                               ),
                               ListTile(
@@ -70,8 +79,7 @@ class ShowHideTabsPage extends StatelessWidget {
                                     : Icon(tabData.icon, color: Colors.grey),
                                 title: tabData.showText
                                     ? Text(tabData.text)
-                                    : Text(tabData.text,
-                                        style: TextStyle(color: Colors.grey)),
+                                    : Text(''),
                                 trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
