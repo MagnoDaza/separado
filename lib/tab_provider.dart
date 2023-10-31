@@ -45,7 +45,7 @@ class TabProvider with ChangeNotifier {
     }
     _showIcons = !_showIcons;
     for (TabData tab in myTabs) {
-      tab.showIcon = _showIcons; // Modifica esta línea
+      tab.showIcon = _showIcons;
     }
     notifyListeners();
   }
@@ -53,12 +53,17 @@ class TabProvider with ChangeNotifier {
   void toggleCustomNamesEnabled() {
     _customNamesEnabled = !_customNamesEnabled;
     if (_customNamesEnabled) {
-      showText = false;
-      _showIcons = false;
+      showText = true; // Asegúrate de que al menos uno de ellos sea verdadero
+      _showIcons = true; // Asegúrate de que al menos uno de ellos sea verdadero
       for (TabData tab in myTabs) {
-        tab.showText = false;
-        tab.showIcon = false; // Modifica esta línea
+        tab.showText =
+            true; // Asegúrate de que al menos uno de ellos sea verdadero
+        tab.showIcon =
+            true; // Asegúrate de que al menos uno de ellos sea verdadero
       }
+    } else {
+      showText = true; // Asegúrate de que al menos uno de ellos sea verdadero
+      _showIcons = true; // Asegúrate de que al menos uno de ellos sea verdadero
     }
     notifyListeners();
   }
