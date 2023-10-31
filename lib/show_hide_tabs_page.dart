@@ -1,9 +1,8 @@
-//archivo show_hide_tabs_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'tab_provider.dart';
 import 'show_hide_name_switch.dart';
+import 'show_hide_icon_switch.dart'; // Importa el nuevo widget
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ShowHideTabsPage extends StatelessWidget {
@@ -21,6 +20,10 @@ class ShowHideTabsPage extends StatelessWidget {
               return Column(
                 children: <Widget>[
                   ShowHideNameSwitch(),
+                  const SizedBox(height: 15),
+                  ShowHideIconSwitch(), // Agrega el nuevo widget aquí
+                  const SizedBox(height: 15),
+                  Divider(), // Agrega una línea horizontal aquí
                   const SizedBox(height: 15),
                   const Text('Nombres e iconos personalizados',
                       style: TextStyle(fontWeight: FontWeight.bold)),
@@ -75,8 +78,8 @@ class ShowHideTabsPage extends StatelessWidget {
                                       },
                                     ),
                                     SizedBox(
-                                        height:
-                                            0), // Agrega espacio entre los elementos
+                                      height: 0,
+                                    ), // Agrega espacio entre los elementos
                                   ],
                                 ),
                               ),
@@ -100,8 +103,8 @@ class ShowHideTabsPage extends StatelessWidget {
                                     },
                                   ),
                                   SizedBox(
-                                      width:
-                                          0), // Agrega espacio entre los elementos
+                                    width: 0,
+                                  ), // Agrega espacio entre los elementos
                                 ],
                               ),
                             ]),

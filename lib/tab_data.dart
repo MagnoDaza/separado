@@ -7,6 +7,7 @@ class TabData {
   bool hideName;
   bool hideIcon;
   bool showText; // Agrega este campo
+  bool showIcon; // Agrega este campo
 
   TabData({
     required this.text,
@@ -14,6 +15,7 @@ class TabData {
     this.hideName = false,
     this.hideIcon = false,
     this.showText = true, // Asegúrate de proporcionar un valor predeterminado
+    this.showIcon = true,
   });
 
   void toggleHideName() {
@@ -22,5 +24,9 @@ class TabData {
 
   void toggleHideIcon() {
     hideIcon = !hideIcon;
+  }
+
+  void toggleShowIcon() {
+    showIcon = !showIcon;
   }
 }
