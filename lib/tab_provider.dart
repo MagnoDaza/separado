@@ -1,5 +1,3 @@
-//archivo tab_provider.dart
-
 import 'package:flutter/material.dart';
 import 'tab_data.dart';
 
@@ -35,6 +33,9 @@ class TabProvider with ChangeNotifier {
       return;
     }
     showText = !showText;
+    if (!showText && !showIcons) {
+      _showIcons = true;
+    }
     for (TabData tab in myTabs) {
       tab.showText = showText;
     }
@@ -46,6 +47,9 @@ class TabProvider with ChangeNotifier {
       return;
     }
     _showIcons = !_showIcons;
+    if (!showText && !showIcons) {
+      showText = true;
+    }
     for (TabData tab in myTabs) {
       tab.showIcon = _showIcons;
     }
