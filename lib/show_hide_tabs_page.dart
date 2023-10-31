@@ -1,10 +1,8 @@
-//archivo show_hide_tabs_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'tab_provider.dart';
 import 'show_hide_name_switch.dart';
-import 'show_hide_icon_switch.dart'; // Importa el nuevo widget
+import 'show_hide_icon_switch.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ShowHideTabsPage extends StatelessWidget {
@@ -55,9 +53,13 @@ class ShowHideTabsPage extends StatelessWidget {
                               Provider.of<TabProvider>(context).myTabs[index];
                           return ListTile(
                             key: Key(tabData.text),
-                            leading:
-                                tabData.showIcon ? Icon(tabData.icon) : null,
-                            title: tabData.showText ? Text(tabData.text) : null,
+                            leading: tabData.showIcon
+                                ? Icon(tabData.icon)
+                                : Icon(tabData.icon, color: Colors.grey),
+                            title: tabData.showText
+                                ? Text(tabData.text)
+                                : Text(tabData.text,
+                                    style: TextStyle(color: Colors.grey)),
                             trailing:
                                 Row(mainAxisSize: MainAxisSize.min, children: [
                               Padding(
