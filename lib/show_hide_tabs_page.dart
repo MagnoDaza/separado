@@ -51,76 +51,71 @@ class ShowHideTabsPage extends StatelessWidget {
                         itemBuilder: (context, index) {
                           var tabData =
                               Provider.of<TabProvider>(context).myTabs[index];
-                          return ListTile(
-                            key: Key(tabData.text),
-                            leading: tabData.showIcon
-                                ? Icon(tabData.icon)
-                                : Icon(tabData.icon, color: Colors.grey),
-                            title: tabData.showText
-                                ? Text(tabData.text)
-                                : Text(tabData.text,
-                                    style: TextStyle(color: Colors.grey)),
-                            trailing:
-                                Row(mainAxisSize: MainAxisSize.min, children: [
-                              Padding(
-                                padding: EdgeInsets.only(right: 20.0),
-                                child: Column(
-                                  children: [
-                                    Icon(Icons.text_fields, size: 20.0),
-                                    Checkbox(
-                                      value: tabData.showText,
-                                      onChanged: (bool? value) {
-                                        if (value != null) {
-                                          tabData.showText = value;
-                                          if (!tabData.showText &&
-                                              !tabData.showIcon) {
-                                            tabData.showIcon = true;
-                                          }
-                                          Fluttertoast.showToast(
-                                            msg: tabData.showText
-                                                ? "Nombre mostrado"
-                                                : "Nombre ocultado",
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                          );
-                                        }
-                                      },
-                                    ),
-                                    SizedBox(
-                                      height: 0,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Column(
+                          return Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Icon(Icons.hide_image, size: 20.0),
-                                  SizedBox(width: 20.0),
-                                  Checkbox(
-                                    value: tabData.showIcon,
-                                    onChanged: (bool? value) {
-                                      if (value != null) {
-                                        tabData.showIcon = value;
-                                        if (!tabData.showText &&
-                                            !tabData.showIcon) {
-                                          tabData.showText = true;
-                                        }
-                                        Fluttertoast.showToast(
-                                          msg: tabData.showIcon
-                                              ? "Icono mostrado"
-                                              : "Icono ocultado",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                        );
-                                      }
-                                    },
-                                  ),
-                                  SizedBox(
-                                    width: 0,
-                                  ),
+                                  Text('Icons'),
+                                  Text('Name Tabs'),
+                                  Icon(Icons.text_fields, size: 20.0),
+                                  Icon(Icons.image, size: 20.0),
                                 ],
                               ),
-                            ]),
+                              ListTile(
+                                key: Key(tabData.text),
+                                leading: tabData.showIcon
+                                    ? Icon(tabData.icon)
+                                    : Icon(tabData.icon, color: Colors.grey),
+                                title: tabData.showText
+                                    ? Text(tabData.text)
+                                    : Text(tabData.text,
+                                        style: TextStyle(color: Colors.grey)),
+                                trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Checkbox(
+                                        value: tabData.showText,
+                                        onChanged: (bool? value) {
+                                          if (value != null) {
+                                            tabData.showText = value;
+                                            if (!tabData.showText &&
+                                                !tabData.showIcon) {
+                                              tabData.showIcon = true;
+                                            }
+                                            Fluttertoast.showToast(
+                                              msg: tabData.showText
+                                                  ? "Nombre mostrado"
+                                                  : "Nombre ocultado",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                            );
+                                          }
+                                        },
+                                      ),
+                                      Checkbox(
+                                        value: tabData.showIcon,
+                                        onChanged: (bool? value) {
+                                          if (value != null) {
+                                            tabData.showIcon = value;
+                                            if (!tabData.showText &&
+                                                !tabData.showIcon) {
+                                              tabData.showText = true;
+                                            }
+                                            Fluttertoast.showToast(
+                                              msg: tabData.showIcon
+                                                  ? "Icono mostrado"
+                                                  : "Icono ocultado",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ]),
+                              ),
+                            ],
                           );
                         },
                       ),
