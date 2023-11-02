@@ -23,7 +23,7 @@ class _TabOrganizerDialogState extends State<TabOrganizerDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Organizar los tabs'),
+      title: const Text('Organizar los tabs'),
       content: Container(
         height: MediaQuery.of(context).size.height *
             0.5, // Ajusta este valor según tus necesidades
@@ -48,13 +48,13 @@ class _TabOrganizerDialogState extends State<TabOrganizerDialog> {
       ),
       actions: <Widget>[
         TextButton(
-          child: Text('Cancelar'),
+          child: const Text('Cancelar'),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text('Confirmar'),
+          child: const Text('Confirmar'),
           onPressed: () {
             Provider.of<TabProvider>(context, listen: false).myTabs =
                 workingTabs;
