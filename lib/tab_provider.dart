@@ -28,22 +28,6 @@ class TabProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleShowText() {
-    showText = !showText;
-    for (TabData tab in myTabs) {
-      tab.showText = showText;
-    }
-    notifyListeners();
-  }
-
-  void toggleShowIcons() {
-    _showIcons = !_showIcons;
-    for (TabData tab in myTabs) {
-      tab.showIcon = _showIcons;
-    }
-    notifyListeners();
-  }
-
   void toggleCustomNamesEnabled() {
     _customNamesEnabled = !_customNamesEnabled;
     if (_customNamesEnabled) {
@@ -67,6 +51,26 @@ class TabProvider with ChangeNotifier {
   void applyChanges() {
     if (_tempTabs.isNotEmpty) {
       myTabs = _tempTabs;
+      notifyListeners();
+    }
+  }
+
+  void toggleShowText() {
+    if (_showIcons) {
+      showText = !showText;
+      for (TabData tab in myTabs) {
+        tab.showText = showText;
+      }
+      notifyListeners();
+    }
+  }
+
+  void toggleShowIcons() {
+    if (showText) {
+      _showIcons = !_showIcons;
+      for (TabData tab in myTabs) {
+        tab.showIcon = _showIcons;
+      }
       notifyListeners();
     }
   }
