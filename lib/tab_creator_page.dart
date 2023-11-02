@@ -5,7 +5,7 @@ import 'tab_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'tab_data.dart';
 import 'icon_list.dart';
-import 'tab_organizer_page.dart';
+import 'tab_organizer_dialog.dart';
 import 'show_hide_tabs_page.dart';
 
 class TabCreatorPage extends StatefulWidget {
@@ -86,9 +86,7 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return Dialog(
-                        child: TabOrganizerPage(),
-                      );
+                      return TabOrganizerDialog();
                     },
                   );
                 },
