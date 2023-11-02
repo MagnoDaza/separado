@@ -7,7 +7,7 @@ class TabProvider with ChangeNotifier {
   List<TabData> get tempTabs => _tempTabs; // Getter for _tempTabs
 
   bool get customNamesEnabled => _customNamesEnabled;
-  bool _customNamesEnabled = false;
+  bool _customNamesEnabled = true;
   bool showText = true;
   bool get showIcons => _showIcons;
   bool _showIcons = true;
