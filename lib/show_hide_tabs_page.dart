@@ -1,10 +1,8 @@
-//archivo show_hide_tads_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'tab_provider.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
 import 'show_hide_switch.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ShowHideTabsPage extends StatelessWidget {
   @override
@@ -53,25 +51,27 @@ class ShowHideTabsPage extends StatelessWidget {
                               Provider.of<TabProvider>(context).myTabs[index];
                           return Column(
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text('Icons')),
-                                  Align(
-                                      alignment: Alignment.center,
-                                      child: Text('Name Tabs')),
-                                  Align(
-                                      alignment: Alignment.center,
-                                      child:
-                                          Icon(Icons.text_fields, size: 20.0)),
-                                  Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Icon(Icons.image, size: 20.0)),
-                                ],
-                              ),
+                              if (index ==
+                                  0) // Solo muestra los títulos en la primera fila
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Expanded(
+                                        child: Center(child: Text('Icon'))),
+                                    Expanded(
+                                        child:
+                                            Center(child: Text('Name Tabs'))),
+                                    Expanded(
+                                        child: Center(
+                                            child: Icon(Icons.text_fields,
+                                                size: 20.0))),
+                                    Expanded(
+                                        child: Center(
+                                            child:
+                                                Icon(Icons.image, size: 20.0))),
+                                  ],
+                                ),
                               ListTile(
                                 key: Key(tabData.text),
                                 leading: tabData.showIcon
