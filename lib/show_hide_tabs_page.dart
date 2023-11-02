@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'tab_provider.dart';
 import 'show_hide_switch.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'edit_tabs_dialog.dart';
 
 class ShowHideTabsPage extends StatelessWidget {
   @override
@@ -40,95 +41,41 @@ class ShowHideTabsPage extends StatelessWidget {
                       );
                     },
                   ),
-                  const SizedBox(height: 20),
                   if (tabProvider.customNamesEnabled)
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount:
-                            Provider.of<TabProvider>(context).myTabs.length,
-                        itemBuilder: (context, index) {
-                          var tabData =
-                              Provider.of<TabProvider>(context).myTabs[index];
-                          return Column(
+                    ElevatedButton(
+                      onPressed: () => showDialog(
+                          context: context, builder: (_) => EditTabsDialog()),
+                      child: Text('Editar'),
+                    ),
+                  const SizedBox(height: 20),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount:
+                          Provider.of<TabProvider>(context).myTabs.length,
+                      itemBuilder: (context, index) {
+                        var tabData =
+                            Provider.of<TabProvider>(context).myTabs[index];
+                        return ListTile(
+                          key: Key(tabData.text),
+                          leading: Icon(tabData.icon),
+                          title: Text(tabData.text),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              if (index ==
-                                  0) // Solo muestra los títulos en la primera fila
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Expanded(
-                                        child: Center(child: Text('Icon'))),
-                                    Expanded(
-                                        child:
-                                            Center(child: Text('Name Tabs'))),
-                                    Expanded(
-                                        child: Center(
-                                            child: Icon(Icons.text_fields,
-                                                size: 20.0))),
-                                    Expanded(
-                                        child: Center(
-                                            child:
-                                                Icon(Icons.image, size: 20.0))),
-                                  ],
-                                ),
-                              ListTile(
-                                key: Key(tabData.text),
-                                leading: tabData.showIcon
-                                    ? Icon(tabData.icon)
-                                    : Icon(tabData.icon, color: Colors.grey),
-                                title: tabData.showText
-                                    ? Text(tabData.text)
-                                    : Text(''),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Checkbox(
-                                      value: tabData.showText,
-                                      onChanged: (bool? value) {
-                                        if (value != null) {
-                                          tabData.showText = value;
-                                          if (!tabData.showText &&
-                                              !tabData.showIcon) {
-                                            tabData.showIcon = true;
-                                          }
-                                          Fluttertoast.showToast(
-                                            msg: tabData.showText
-                                                ? "Nombre mostrado"
-                                                : "Nombre ocultado",
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                          );
-                                        }
-                                      },
-                                    ),
-                                    Checkbox(
-                                      value: tabData.showIcon,
-                                      onChanged: (bool? value) {
-                                        if (value != null) {
-                                          tabData.showIcon = value;
-                                          if (!tabData.showText &&
-                                              !tabData.showIcon) {
-                                            tabData.showText = true;
-                                          }
-                                          Fluttertoast.showToast(
-                                            msg: tabData.showIcon
-                                                ? "Icono mostrado"
-                                                : "Icono ocultado",
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.BOTTOM,
-                                          );
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                ),
+                              Checkbox(
+                                value: tabData.showText,
+                                onChanged: null,
+                              ),
+                              Checkbox(
+                                value: tabData.showIcon,
+                                onChanged: null,
                               ),
                             ],
-                          );
-                        },
-                      ),
+                          ),
+                        );
+                      },
                     ),
+                  ),
                 ],
               );
             },

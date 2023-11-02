@@ -24,4 +24,18 @@ class TabData {
   void toggleHideIcon() {
     hideIcon = !hideIcon;
   }
+
+  TabData copyWith({
+    String? text,
+    IconData? icon,
+    bool? showText,
+    bool? showIcon,
+  }) {
+    return TabData(
+      text: text ?? this.text,
+      icon: icon ?? this.icon,
+      showText: showText ?? this.showText,
+      showIcon: showIcon ?? this.showIcon,
+    );
+  }
 }

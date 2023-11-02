@@ -9,6 +9,8 @@ class TabProvider with ChangeNotifier {
   bool get customNamesEnabled => _customNamesEnabled;
   bool _customNamesEnabled = false;
 
+  List<TabData> _savedState = [];
+
   bool showText = true;
 
   bool get showIcons => _showIcons;
@@ -78,5 +80,16 @@ class TabProvider with ChangeNotifier {
       _showIcons = true;
     }
     notifyListeners();
+  }
+
+  void saveState() {
+    _savedState = myTabs.map((tab) => tab.copyWith()).toList();
+  }
+
+  void restoreState() {
+    if (_savedState.isNotEmpty) {
+      myTabs = _savedState;
+      notifyListeners();
+    }
   }
 }
