@@ -1,18 +1,14 @@
-//archivo tabprovider.dart
 import 'package:flutter/material.dart';
 import 'tab_data.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class TabProvider with ChangeNotifier {
   List<TabData> myTabs = [TabData(text: 'Tab 1', icon: Icons.home)];
+  List<TabData> _tempTabs = [];
+  List<TabData> get tempTabs => _tempTabs; // Getter for _tempTabs
 
   bool get customNamesEnabled => _customNamesEnabled;
   bool _customNamesEnabled = false;
-
-  List<TabData> _savedState = [];
-
   bool showText = true;
-
   bool get showIcons => _showIcons;
   bool _showIcons = true;
 
@@ -33,37 +29,19 @@ class TabProvider with ChangeNotifier {
   }
 
   void toggleShowText() {
-    if (!showIcons) {
-      Fluttertoast.showToast(
-        msg:
-            "No se pueden tener ambos switches apagados. Por favor, enciende el switch de icono primero.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
-    } else {
-      showText = !showText;
-      for (TabData tab in myTabs) {
-        tab.showText = showText;
-      }
-      notifyListeners();
+    showText = !showText;
+    for (TabData tab in myTabs) {
+      tab.showText = showText;
     }
+    notifyListeners();
   }
 
   void toggleShowIcons() {
-    if (!showText) {
-      Fluttertoast.showToast(
-        msg:
-            "No se pueden tener ambos switches apagados. Por favor, enciende el switch de texto primero.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
-    } else {
-      _showIcons = !_showIcons;
-      for (TabData tab in myTabs) {
-        tab.showIcon = _showIcons;
-      }
-      notifyListeners();
+    _showIcons = !_showIcons;
+    for (TabData tab in myTabs) {
+      tab.showIcon = _showIcons;
     }
+    notifyListeners();
   }
 
   void toggleCustomNamesEnabled() {
@@ -83,12 +61,12 @@ class TabProvider with ChangeNotifier {
   }
 
   void saveState() {
-    _savedState = myTabs.map((tab) => tab.copyWith()).toList();
+    _tempTabs = myTabs.map((tab) => tab.copyWith()).toList();
   }
 
-  void restoreState() {
-    if (_savedState.isNotEmpty) {
-      myTabs = _savedState;
+  void applyChanges() {
+    if (_tempTabs.isNotEmpty) {
+      myTabs = _tempTabs;
       notifyListeners();
     }
   }

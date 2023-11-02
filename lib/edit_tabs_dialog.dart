@@ -3,19 +3,23 @@ import 'package:provider/provider.dart';
 import 'tab_provider.dart';
 
 class EditTabsDialog extends StatelessWidget {
+  const EditTabsDialog({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Provider.of<TabProvider>(context, listen: false).saveState();
 
     return AlertDialog(
-      title: Text('Editar nombre del tab'),
+      title: const Text('Editar nombre del tab'),
       content: Container(
         width: double.maxFinite,
         child: ListView.builder(
           shrinkWrap: true,
-          itemCount: Provider.of<TabProvider>(context).myTabs.length,
+          itemCount:
+              Provider.of<TabProvider>(context, listen: false).tempTabs.length,
           itemBuilder: (context, index) {
-            var tabData = Provider.of<TabProvider>(context).myTabs[index];
+            var tabData = Provider.of<TabProvider>(context, listen: false)
+                .tempTabs[index];
             return ListTile(
               key: Key(tabData.text),
               leading: Icon(tabData.icon),
@@ -53,15 +57,15 @@ class EditTabsDialog extends StatelessWidget {
       ),
       actions: <Widget>[
         TextButton(
-          child: Text('Cancelar'),
+          child: const Text('Cancelar'),
           onPressed: () {
-            Provider.of<TabProvider>(context, listen: false).restoreState();
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text('Confirmar'),
+          child: const Text('Confirmar'),
           onPressed: () {
+            Provider.of<TabProvider>(context, listen: false).applyChanges();
             Navigator.of(context).pop();
           },
         ),
