@@ -1,5 +1,3 @@
-//archivo show_hide_tabs_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'tab_provider.dart';
@@ -8,11 +6,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'edit_tabs_dialog.dart';
 
 class ShowHideTabsPage extends StatelessWidget {
+  const ShowHideTabsPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mostrar nombre del tab'),
+        title: const Text('Mostrar nombre del tab'),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -21,16 +21,16 @@ class ShowHideTabsPage extends StatelessWidget {
             builder: (context, tabProvider, child) {
               return Column(
                 children: <Widget>[
-                  Text("Mostrar u ocultar nombre"),
+                  const Text("Mostrar u ocultar nombre"),
                   ShowHideSwitch(),
                   const SizedBox(height: 15),
-                  Divider(),
+                  const Divider(),
                   const SizedBox(height: 15),
                   const Text('Nombres e iconos personalizados',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 15),
                   SwitchListTile(
-                    title: Text('Nombre e icono personalizado'),
+                    title: const Text('Nombre e icono personalizado'),
                     value: tabProvider.customNamesEnabled,
                     onChanged: (bool value) {
                       tabProvider.toggleCustomNamesEnabled();
@@ -46,8 +46,9 @@ class ShowHideTabsPage extends StatelessWidget {
                   if (tabProvider.customNamesEnabled)
                     ElevatedButton(
                       onPressed: () => showDialog(
-                          context: context, builder: (_) => EditTabsDialog()),
-                      child: Text('Editar'),
+                          context: context,
+                          builder: (_) => const EditTabsDialog()),
+                      child: const Text('Editar'),
                     ),
                   const SizedBox(height: 20),
                   Expanded(
@@ -59,15 +60,27 @@ class ShowHideTabsPage extends StatelessWidget {
                             Provider.of<TabProvider>(context).myTabs[index];
                         return ListTile(
                           key: Key(tabData.text),
-                          leading: Icon(tabData.icon),
-                          title: Text(tabData.text),
+                          leading: IconTheme(
+                            data: IconThemeData(
+                              color:
+                                  tabData.showIcon ? Colors.black : Colors.grey,
+                            ),
+                            child: Icon(tabData.icon),
+                          ),
+                          title: Text(tabData.text,
+                              style: TextStyle(
+                                  color: tabData.showText
+                                      ? Colors.black
+                                      : Colors.grey)),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
+                              Icon(Icons.text_fields), // Icono de texto
                               Checkbox(
                                 value: tabData.showText,
                                 onChanged: null,
                               ),
+                              Icon(Icons.image), // Icono de imagen
                               Checkbox(
                                 value: tabData.showIcon,
                                 onChanged: null,
