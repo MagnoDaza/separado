@@ -10,7 +10,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Home Page'),
+        title: Text('Maghara'),
       ),
       body: Consumer<TabProvider>(
         builder: (context, tabProvider, child) {
