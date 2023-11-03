@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'tab_provider.dart';
-import 'new_tab_dialog.dart'; // Update this import
+import 'new_tab_dialog.dart';
 import 'show_hide_tabs_page.dart';
 import 'tab_organizer_dialog.dart';
 
@@ -53,13 +53,12 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
             children: [
               const SizedBox(height: 15),
               Text('Crear un nuevo tab'),
-              const SizedBox(height: 15),
               ElevatedButton(
                 onPressed: () {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return NewTabDialog(); // Update this constructor call
+                      return NewTabDialog();
                     },
                   );
                 },
@@ -104,8 +103,15 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                       Provider.of<TabProvider>(context).myTabs.map((tabData) {
                     return ListTile(
                       key: Key(tabData.text),
-                      leading: tabData.showIcon ? Icon(tabData.icon) : null,
-                      title: Text(tabData.text),
+                      leading: tabData.showIcon
+                          ? Icon(tabData.icon)
+                          : Icon(Icons.visibility_off),
+                      title: tabData.showText
+                          ? Text(tabData.text)
+                          : Row(children: [
+                              Text(tabData.text),
+                              Icon(Icons.visibility_off)
+                            ]),
                       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                         IconButton(
                           icon: Icon(Icons.edit),
@@ -121,9 +127,7 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return NewTabDialog(
-                                    tabIndex:
-                                        _tabIndex); // Update this constructor call
+                                return NewTabDialog(tabIndex: _tabIndex);
                               },
                             );
                           },
