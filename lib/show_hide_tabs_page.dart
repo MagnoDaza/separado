@@ -1,11 +1,9 @@
-//archivo: show_hide_tabs_page.dart
-
+// File: show_hide_tabs_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'tab_provider.dart';
 import 'show_hide_switch.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'edit_tabs_dialog.dart';
 
 class ShowHideTabsPage extends StatelessWidget {
   const ShowHideTabsPage({Key? key}) : super(key: key);
@@ -23,6 +21,7 @@ class ShowHideTabsPage extends StatelessWidget {
             builder: (context, tabProvider, child) {
               return Column(
                 children: <Widget>[
+                  const SizedBox(height: 15),
                   const Text("Mostrar u ocultar nombre"),
                   ShowHideSwitch(),
                   const SizedBox(height: 15),
@@ -47,9 +46,12 @@ class ShowHideTabsPage extends StatelessWidget {
                   ),
                   if (tabProvider.customNamesEnabled)
                     ElevatedButton(
-                      onPressed: () => showDialog(
-                          context: context,
-                          builder: (_) => const EditTabsDialog()),
+                      onPressed: () {
+                        // showDialog(
+                        //   context: context,
+                        //   builder: (_) => const EditTabsDialog(),
+                        // );
+                      },
                       child: const Text('Editar'),
                     ),
                   const SizedBox(height: 20),
@@ -74,21 +76,19 @@ class ShowHideTabsPage extends StatelessWidget {
                                   color: tabData.showText
                                       ? Colors.black
                                       : Colors.grey)),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.text_fields), // Icono de texto
-                              Checkbox(
-                                value: tabData.showText,
-                                onChanged: null,
-                              ),
-                              Icon(Icons.image), // Icono de imagen
-                              Checkbox(
-                                value: tabData.showIcon,
-                                onChanged: null,
-                              ),
-                            ],
-                          ),
+                          trailing:
+                              Row(mainAxisSize: MainAxisSize.min, children: [
+                            Icon(Icons.text_fields), // Icono de texto
+                            Checkbox(
+                              value: tabData.showText,
+                              onChanged: null,
+                            ),
+                            Icon(Icons.image), // Icono de imagen
+                            Checkbox(
+                              value: tabData.showIcon,
+                              onChanged: null,
+                            ),
+                          ]),
                         );
                       },
                     ),
