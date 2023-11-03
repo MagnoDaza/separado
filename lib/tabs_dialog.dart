@@ -1,20 +1,22 @@
-// File: new_tab_dialog.dart
+// File: tab_dialog.dart
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'icon_list.dart';
 import 'tab_provider.dart';
-import 'tab_preview.dart'; // Import TabPreview
+import 'tab_preview.dart'; // Import TabPreview class
 
-class NewTabDialog extends StatefulWidget {
+class TabDialog extends StatefulWidget {
   final int? tabIndex;
-  NewTabDialog({this.tabIndex});
+  final bool isNewTab;
+
+  TabDialog({this.tabIndex, this.isNewTab = false});
 
   @override
-  _NewTabDialogState createState() => _NewTabDialogState();
+  _TabDialogState createState() => _TabDialogState();
 }
 
-class _NewTabDialogState extends State<NewTabDialog> {
+class _TabDialogState extends State<TabDialog> {
   TextEditingController? _textController;
   IconData? _icon;
 
@@ -39,14 +41,15 @@ class _NewTabDialogState extends State<NewTabDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title:
-          Text(widget.tabIndex != null ? 'Editar Tab' : 'Crear un nuevo tab'),
+      title: Text(widget.isNewTab ? 'Crear un nuevo tab' : 'Editar Tab'),
       content: Column(
         children: <Widget>[
-          TextField(
-            controller: _textController,
-            decoration: InputDecoration(hintText: "Nombre del Tab"),
-          ),
+          const SizedBox(height: 15),
+          const Text('Preview', style: TextStyle(fontSize: 14)),
+          if (_textController != null && _icon != null)
+            TabPreview(textController: _textController!, icon: _icon!),
+          const SizedBox(height: 15),
+          const Text('Selecciona el icono', style: TextStyle(fontSize: 14)),
           IconButton(
             icon: Icon(_icon),
             onPressed: () async {
@@ -65,9 +68,12 @@ class _NewTabDialogState extends State<NewTabDialog> {
               }
             },
           ),
-          // Add TabPreview here
-          if (_textController != null && _icon != null)
-            TabPreview(text: _textController!.text, icon: _icon!),
+          const SizedBox(height: 15),
+          const Text('Nombre del Tab', style: TextStyle(fontSize: 14)),
+          TextField(
+            controller: _textController,
+            decoration: InputDecoration(hintText: "Nombre del Tab"),
+          ),
         ],
       ),
       actions: <Widget>[
@@ -76,16 +82,18 @@ class _NewTabDialogState extends State<NewTabDialog> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(
-          child: Text(widget.tabIndex != null
-              ? 'Confirmar edición'
-              : 'Crear nuevo tab'),
+          child:
+              Text(widget.isNewTab ? 'Crear nuevo tab' : 'Confirmar edición'),
           onPressed: () {
             if (_textController != null &&
                 _icon != null &&
                 _textController!.text.isNotEmpty) {
-              if (widget.tabIndex != null) {
-                Provider.of<TabProvider>(context, listen: false)
-                    .updateTab(widget.tabIndex!, _textController!.text, _icon!);
+              if (!widget.isNewTab) {
+                Provider.of<TabProvider>(context, listen: false).updateTab(
+                  widget.tabIndex!,
+                  _textController!.text,
+                  _icon!,
+                );
                 Fluttertoast.showToast(
                   msg: "Tab actualizado",
                   toastLength: Toast.LENGTH_SHORT,

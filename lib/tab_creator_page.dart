@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'tab_provider.dart';
-import 'new_tab_dialog.dart';
+import 'tabs_dialog.dart'; // Import TabDialog class
 import 'show_hide_tabs_page.dart';
 import 'tab_organizer_dialog.dart';
 
@@ -16,29 +16,6 @@ class TabCreatorPage extends StatefulWidget {
 }
 
 class _TabCreatorPageState extends State<TabCreatorPage> {
-  TextEditingController? _textController;
-  IconData? _icon;
-  int? _tabIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.tabIndex != null) {
-      _textController = TextEditingController(
-        text: Provider.of<TabProvider>(context, listen: false)
-            .myTabs[widget.tabIndex!]
-            .text,
-      );
-      _icon = Provider.of<TabProvider>(context, listen: false)
-          .myTabs[widget.tabIndex!]
-          .icon;
-      _tabIndex = widget.tabIndex;
-    } else {
-      _textController = TextEditingController();
-      _icon = Icons.home;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +35,7 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return NewTabDialog();
+                      return TabDialog(isNewTab: true);
                     },
                   );
                 },
@@ -117,17 +94,14 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                           icon: Icon(Icons.edit),
                           onPressed: () {
                             // Add your logic for editing a tab here
-                            _textController =
-                                TextEditingController(text: tabData.text);
-                            _icon = tabData.icon;
-                            _tabIndex =
+                            int tabIndex =
                                 Provider.of<TabProvider>(context, listen: false)
                                     .myTabs
                                     .indexOf(tabData);
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return NewTabDialog(tabIndex: _tabIndex);
+                                return TabDialog(tabIndex: tabIndex);
                               },
                             );
                           },

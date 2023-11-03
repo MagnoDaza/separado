@@ -1,11 +1,10 @@
-// File: tab_preview.dart
 import 'package:flutter/material.dart';
 
 class TabPreview extends StatelessWidget {
-  final String text;
+  final TextEditingController textController;
   final IconData icon;
 
-  TabPreview({required this.text, required this.icon});
+  TabPreview({required this.textController, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +17,14 @@ class TabPreview extends StatelessWidget {
             border: Border.all(color: Colors.black),
             borderRadius: BorderRadius.circular(5),
           ),
-          child: Tab(
-            text: 'tabs',
-            icon: Icon(icon),
+          child: ValueListenableBuilder<TextEditingValue>(
+            valueListenable: textController,
+            builder: (context, value, child) {
+              return Tab(
+                text: value.text.isEmpty ? 'inicial' : value.text,
+                icon: Icon(icon),
+              );
+            },
           ),
         ),
         const SizedBox(height: 0),
