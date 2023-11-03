@@ -21,10 +21,12 @@ class TabData {
 
   void toggleHideName() {
     hideName = !hideName;
+    showText = !hideName; // Actualiza showText cuando hideName cambia
   }
 
   void toggleHideIcon() {
     hideIcon = !hideIcon;
+    showIcon = !hideIcon; // Actualiza showIcon cuando hideIcon cambia
   }
 
   TabData copyWith({

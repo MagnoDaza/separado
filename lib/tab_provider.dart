@@ -76,4 +76,14 @@ class TabProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void updateTabShowText(int index, bool showText) {
+    myTabs[index].showText = showText;
+    notifyListeners();
+  }
+
+  void updateTabShowIcon(int index, bool showIcon) {
+    myTabs[index].showIcon = showIcon;
+    notifyListeners();
+  }
 }

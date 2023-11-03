@@ -82,18 +82,25 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                       key: Key(tabData.text),
                       leading: tabData.showIcon
                           ? Icon(tabData.icon)
-                          : Icon(Icons.visibility_off),
+                          : Row(children: [
+                              Icon(tabData.icon),
+                              Icon(
+                                Icons.visibility_off,
+                                size: 10,
+                              )
+                            ]),
                       title: tabData.showText
                           ? Text(tabData.text)
                           : Row(children: [
                               Text(tabData.text),
-                              Icon(Icons.visibility_off)
+                              Icon(
+                                Icons.visibility_off,
+                              )
                             ]),
                       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                         IconButton(
                           icon: Icon(Icons.edit),
                           onPressed: () {
-                            // Add your logic for editing a tab here
                             int tabIndex =
                                 Provider.of<TabProvider>(context, listen: false)
                                     .myTabs
@@ -109,7 +116,6 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                         IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () {
-                            // Add your logic for deleting a tab here
                             Provider.of<TabProvider>(context, listen: false)
                                 .removeTab(Provider.of<TabProvider>(context,
                                         listen: false)
