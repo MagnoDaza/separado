@@ -18,35 +18,17 @@ class TabPreview extends StatelessWidget {
     return ValueListenableBuilder<TextEditingValue>(
       valueListenable: textController,
       builder: (context, value, child) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width / 5,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Tab(
-                text: showText
-                    ? (value.text.isEmpty ? 'inicial' : value.text)
-                    : null,
-                icon: showIcon ? Icon(icon) : null,
-              ),
-            ),
-            const SizedBox(height: 0),
-            Container(
-              width: MediaQuery.of(context).size.width / 5,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: const Tab(
-                text: 'tab normal',
-                icon: Icon(Icons.favorite),
-              ),
-            ),
-          ],
+        return Container(
+          width: MediaQuery.of(context).size.width / 5,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Tab(
+            text:
+                showText ? (value.text.isEmpty ? 'inicial' : value.text) : null,
+            icon: showIcon ? Icon(icon) : null,
+          ),
         );
       },
     );

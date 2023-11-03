@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'tab_provider.dart';
-import 'show_hide_switch.dart';
+import 'show_hide_switch.dart'; // Asegúrate de que esta ruta de importación es correcta
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ShowHideTabsPage extends StatelessWidget {
@@ -44,55 +44,7 @@ class ShowHideTabsPage extends StatelessWidget {
                       );
                     },
                   ),
-                  if (tabProvider.customNamesEnabled)
-                    ElevatedButton(
-                      onPressed: () {
-                        // showDialog(
-                        //   context: context,
-                        //   builder: (_) => const EditTabsDialog(),
-                        // );
-                      },
-                      child: const Text('Editar'),
-                    ),
                   const SizedBox(height: 20),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount:
-                          Provider.of<TabProvider>(context).myTabs.length,
-                      itemBuilder: (context, index) {
-                        var tabData =
-                            Provider.of<TabProvider>(context).myTabs[index];
-                        return ListTile(
-                          key: Key(tabData.text),
-                          leading: IconTheme(
-                            data: IconThemeData(
-                              color:
-                                  tabData.showIcon ? Colors.black : Colors.grey,
-                            ),
-                            child: Icon(tabData.icon),
-                          ),
-                          title: Text(tabData.text,
-                              style: TextStyle(
-                                  color: tabData.showText
-                                      ? Colors.black
-                                      : Colors.grey)),
-                          trailing:
-                              Row(mainAxisSize: MainAxisSize.min, children: [
-                            const Icon(Icons.text_fields), // Icono de texto
-                            Checkbox(
-                              value: tabData.showText,
-                              onChanged: null,
-                            ),
-                            const Icon(Icons.image), // Icono de imagen
-                            Checkbox(
-                              value: tabData.showIcon,
-                              onChanged: null,
-                            ),
-                          ]),
-                        );
-                      },
-                    ),
-                  ),
                 ],
               );
             },
