@@ -9,7 +9,7 @@ import 'tab_organizer_dialog.dart';
 
 class TabCreatorPage extends StatefulWidget {
   final int? tabIndex;
-  TabCreatorPage({this.tabIndex});
+  const TabCreatorPage({this.tabIndex});
 
   @override
   _TabCreatorPageState createState() => _TabCreatorPageState();
@@ -20,7 +20,7 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Creador de DinamicsTabs'),
+        title: const Text('Creador de DinamicsTabs'),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -29,35 +29,35 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(height: 15),
-              Text('Crear un nuevo tab'),
+              const Text('Crear un nuevo tab'),
               ElevatedButton(
                 onPressed: () {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return TabDialog(isNewTab: true);
+                      return const TabDialog(isNewTab: true);
                     },
                   );
                 },
-                child: Text('Crear un nuevo tab'),
+                child: const Text('Crear un nuevo tab'),
               ),
-              Divider(),
+              const Divider(),
               const SizedBox(height: 15),
-              Text('Mostrar Tabs'),
+              const Text('Mostrar Tabs'),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ShowHideTabsPage(),
+                      builder: (context) => const ShowHideTabsPage(),
                     ),
                   );
                 },
-                child: Text('Mostrar Tabs'),
+                child: const Text('Mostrar Tabs'),
               ),
-              Divider(),
+              const Divider(),
               const SizedBox(height: 15),
-              Text('Organizar los tabs'),
+              const Text('Organizar los tabs'),
               ElevatedButton(
                 onPressed: () {
                   showDialog(
@@ -67,9 +67,10 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                     },
                   );
                 },
-                child: Text('Organizar los tabs'),
+                child: const Text('Organizar los tabs'),
               ),
-              Divider(),
+              const SizedBox(height: 15),
+              const Divider(),
               const SizedBox(height: 15),
               const Text('Mis DinamicsTabs',
                   style: TextStyle(fontWeight: FontWeight.bold)),
@@ -90,7 +91,7 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                                   alignment: Alignment.center,
                                   child: Icon(tabData.icon),
                                 ),
-                                Padding(
+                                const Padding(
                                   padding: EdgeInsets.only(
                                       right:
                                           5.0), // Añade 5 pixeles de espacio a la derecha
@@ -106,7 +107,7 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                           ? Text(tabData.text)
                           : Row(children: [
                               Text(tabData.text),
-                              Padding(
+                              const Padding(
                                 padding: EdgeInsets.only(
                                     right:
                                         5.0), // Añade 5 pixeles de espacio a la derecha
@@ -118,7 +119,7 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                             ]),
                       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                         IconButton(
-                          icon: Icon(Icons.edit),
+                          icon: const Icon(Icons.edit),
                           onPressed: () {
                             int tabIndex =
                                 Provider.of<TabProvider>(context, listen: false)

@@ -41,8 +41,10 @@ class MyHomePage extends StatelessWidget {
                 }).toList(),
               ),
               floatingActionButton: FloatingActionButton(
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => TabCreatorPage())),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const TabCreatorPage())),
                 child: const Icon(Icons.add),
               ),
             ),

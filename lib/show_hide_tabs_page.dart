@@ -78,12 +78,12 @@ class ShowHideTabsPage extends StatelessWidget {
                                       : Colors.grey)),
                           trailing:
                               Row(mainAxisSize: MainAxisSize.min, children: [
-                            Icon(Icons.text_fields), // Icono de texto
+                            const Icon(Icons.text_fields), // Icono de texto
                             Checkbox(
                               value: tabData.showText,
                               onChanged: null,
                             ),
-                            Icon(Icons.image), // Icono de imagen
+                            const Icon(Icons.image), // Icono de imagen
                             Checkbox(
                               value: tabData.showIcon,
                               onChanged: null,

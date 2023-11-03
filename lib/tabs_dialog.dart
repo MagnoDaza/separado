@@ -10,7 +10,7 @@ class TabDialog extends StatefulWidget {
   final int? tabIndex;
   final bool isNewTab;
 
-  TabDialog({this.tabIndex, this.isNewTab = false});
+  const TabDialog({this.tabIndex, this.isNewTab = false});
 
   @override
   _TabDialogState createState() => _TabDialogState();
@@ -76,7 +76,7 @@ class _TabDialogState extends State<TabDialog> {
           const Text('Nombre del Tab', style: TextStyle(fontSize: 14)),
           TextField(
             controller: _textController,
-            decoration: InputDecoration(hintText: "Nombre del Tab"),
+            decoration: const InputDecoration(hintText: "Nombre del Tab"),
           ),
           const SizedBox(height: 15),
           const Text('Mostrar en el tab', style: TextStyle(fontSize: 14)),
@@ -103,7 +103,7 @@ class _TabDialogState extends State<TabDialog> {
       ),
       actions: <Widget>[
         TextButton(
-          child: Text('Cancelar'),
+          child: const Text('Cancelar'),
           onPressed: () => Navigator.of(context).pop(),
         ),
         TextButton(

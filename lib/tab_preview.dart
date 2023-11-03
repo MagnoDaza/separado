@@ -6,7 +6,7 @@ class TabPreview extends StatelessWidget {
   final bool showText;
   final bool showIcon;
 
-  TabPreview({
+  const TabPreview({
     required this.textController,
     required this.icon,
     this.showText = true,

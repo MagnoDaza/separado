@@ -14,15 +14,15 @@ class _IconListState extends State<IconList> {
     final int _totalPages = (icons.length / _iconsPerPage).ceil();
 
     return SimpleDialog(
-      title: Text('Selecciona un icono'),
+      title: const Text('Selecciona un icono'),
       children: List.generate(_totalPages, (page) {
         return GridView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: (page < _totalPages - 1)
               ? _iconsPerPage
               : icons.length % _iconsPerPage,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 5,
             childAspectRatio: 1.0,
           ),
