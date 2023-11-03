@@ -158,17 +158,17 @@ class _TabDialogState extends State<TabDialog> {
                 Provider.of<TabProvider>(context, listen: false)
                     .updateTabShowIcon(tabIndex!, false);
                 Provider.of<TabProvider>(context, listen: false)
-                    .updateTabShowText(tabIndex!, true);
+                    .updateTabShowText(tabIndex, true);
               } else if (dropdownValue == 'Solo el icono') {
                 Provider.of<TabProvider>(context, listen: false)
                     .updateTabShowIcon(tabIndex!, true);
                 Provider.of<TabProvider>(context, listen: false)
-                    .updateTabShowText(tabIndex!, false);
+                    .updateTabShowText(tabIndex, false);
               } else {
                 Provider.of<TabProvider>(context, listen: false)
                     .updateTabShowIcon(tabIndex!, true);
                 Provider.of<TabProvider>(context, listen: false)
-                    .updateTabShowText(tabIndex!, true);
+                    .updateTabShowText(tabIndex, true);
               }
             } else {
               Fluttertoast.showToast(

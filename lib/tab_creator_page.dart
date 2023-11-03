@@ -82,19 +82,38 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                       key: Key(tabData.text),
                       leading: tabData.showIcon
                           ? Icon(tabData.icon)
-                          : Row(children: [
-                              Icon(tabData.icon),
-                              Icon(
-                                Icons.visibility_off,
-                                size: 10,
-                              )
-                            ]),
+                          : Container(
+                              width:
+                                  50.0, // Ajusta este valor según tus necesidades
+                              child: Row(children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Icon(tabData.icon),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      right:
+                                          5.0), // Añade 5 pixeles de espacio a la derecha
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child:
+                                        Icon(Icons.visibility_off, size: 18.0),
+                                  ),
+                                )
+                              ]),
+                            ),
                       title: tabData.showText
                           ? Text(tabData.text)
                           : Row(children: [
                               Text(tabData.text),
-                              Icon(
-                                Icons.visibility_off,
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    right:
+                                        5.0), // Añade 5 pixeles de espacio a la derecha
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Icon(Icons.visibility_off, size: 18.0),
+                                ),
                               )
                             ]),
                       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -114,19 +133,34 @@ class _TabCreatorPageState extends State<TabCreatorPage> {
                           },
                         ),
                         IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            Provider.of<TabProvider>(context, listen: false)
-                                .removeTab(Provider.of<TabProvider>(context,
-                                        listen: false)
-                                    .myTabs
-                                    .indexOf(tabData));
-                            Fluttertoast.showToast(
-                              msg: "Tab eliminado",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                            );
-                          },
+                          icon: Icon(Icons.delete,
+                              color: Provider.of<TabProvider>(context,
+                                              listen: false)
+                                          .myTabs
+                                          .indexOf(tabData) ==
+                                      0
+                                  ? Colors.grey
+                                  : null),
+                          onPressed:
+                              Provider.of<TabProvider>(context, listen: false)
+                                          .myTabs
+                                          .indexOf(tabData) ==
+                                      0
+                                  ? null
+                                  : () {
+                                      Provider.of<TabProvider>(context,
+                                              listen: false)
+                                          .removeTab(Provider.of<TabProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .myTabs
+                                              .indexOf(tabData));
+                                      Fluttertoast.showToast(
+                                        msg: "Tab eliminado",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                      );
+                                    },
                         ),
                       ]),
                     );

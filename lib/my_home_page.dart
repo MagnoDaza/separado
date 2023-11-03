@@ -10,7 +10,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Maghara'),
+        title: const Text('Maghara'),
       ),
       body: Consumer<TabProvider>(
         builder: (context, tabProvider, child) {
@@ -43,7 +43,7 @@ class MyHomePage extends StatelessWidget {
               floatingActionButton: FloatingActionButton(
                 onPressed: () => Navigator.push(context,
                     MaterialPageRoute(builder: (context) => TabCreatorPage())),
-                child: Icon(Icons.add),
+                child: const Icon(Icons.add),
               ),
             ),
           );
